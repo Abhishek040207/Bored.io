@@ -13,7 +13,7 @@ if not GROQ_API_KEY:
     raise ValueError("GROQ_API_KEY not found")
 
 genai.configure(api_key=GEMINI_API_KEY)
-gemini_model = genai.GenerativeModel('gemini-2.0-flash-exp')
+gemini_model = genai.GenerativeModel('gemini-3.6-flash')
 groq_client = Groq(api_key=GROQ_API_KEY)
 
 
@@ -96,9 +96,10 @@ async def extract_prescription(image_path: str) -> Dict:
     
     try:
         print(f"📸 Extracting prescription with Gemini Vision...")
-        
-        # Upload image to Gemini
-        image_file = genai.upload_file(image_path)
+        from PIL import Image
+        img = Image.open(image_path)
+        if img.mode in ('RGBA', 'P'):
+            img = img.convert('RGB')
         
         prompt = """Extract all information from this medical prescription image.
 
@@ -119,7 +120,7 @@ Return ONLY valid JSON (no markdown):
 }
 """
         
-        response = gemini_model.generate_content([prompt, image_file])
+        response = gemini_model.generate_content([prompt, img])
         text = response.text.strip()
         
         if text.startswith('```'):

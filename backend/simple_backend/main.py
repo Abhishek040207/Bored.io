@@ -23,8 +23,9 @@ from app.services.storage_service import storage
 from app.services.mongo_service import mongo_service
 from app.services.mongodb_storage import mongodb_storage
 
-# Load environment variables
+# Load environment variables (supports local and root .env)
 load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), ".env"))
 
 # Verify API keys with graceful warning fallback
 required_keys = ['GEMINI_API_KEY', 'GROQ_API_KEY']
@@ -119,7 +120,10 @@ def root():
             "Groq Whisper Transcription (Hindi/English)",
             "Gemini 2.0 Vision OCR",
             "Real-time SOAP Notes",
-            "Prescription History"
+            "Prescription History",
+            "Bhashini NMT Translation (12 Indian Languages)",
+            "Bhashini TTS Text-to-Speech",
+            "Bhashini ASR Speech-to-Text"
         ],
         "endpoints": {
             "docs": "/docs",
@@ -127,7 +131,10 @@ def root():
             "queue": "/queue",
             "uploads": "/upload",
             "notes": "/notes",
-            "history": "/history"
+            "history": "/history",
+            "translate": "/kiosk/translate",
+            "tts": "/kiosk/speech/tts",
+            "bhashini_status": "/kiosk/bhashini/status"
         },
         "statistics": {
             "total_patients": len(patients_data),
@@ -138,7 +145,10 @@ def root():
         "integrations": {
             "transcription": "Groq Whisper (whisper-large-v3-turbo)",
             "ai_structuring": "Gemini 2.5 Flash",
-            "ocr": "Gemini Vision"
+            "ocr": "Gemini Vision",
+            "translation": "Bhashini NLTM NMT (12 Indian Languages)",
+            "tts": "Bhashini NLTM TTS (Natural Indian Voices)",
+            "asr": "Bhashini NLTM ASR + Groq Whisper Fallback"
         }
     }
 
@@ -221,6 +231,9 @@ async def startup_event():
     print("   - /history   (Prescription History)")
     print("   - /documents (Multi-Document Timeline)")
     print("   - /kiosk     (MediKiosk Patient Self-Service)")
+    print("   - /kiosk/translate  (Bhashini NMT Translation)")
+    print("   - /kiosk/speech/tts (Bhashini TTS Text-to-Speech)")
+    print("   - /kiosk/bhashini/status (Pipeline Status)")
     print("="*60)
     print("📚 API Documentation: http://localhost:8000/docs")
     print("="*60 + "\n")

@@ -13,15 +13,15 @@ const HowItWorks = () => {
     {
       id: 1,
       icon: FiMic,
-      title: "Nurse starts Swasya Listen",
-      description: "Nurse opens the mobile app and starts the visit. Swasya Listen transcribes the conversation live.",
+      title: "Nurse starts Sahayak Listen",
+      description: "Nurse opens the mobile app and starts the visit. Sahayak Listen transcribes the conversation live.",
       microcopy: "Voice → Text → Key symptoms extracted.",
       alt: "Phone with microphone icon for voice transcription"
     },
     {
       id: 2,
       icon: FiFileText,
-      title: "Nurse scans documents with Swasya Scan",
+      title: "Nurse scans documents with Sahayak Scan",
       description: "Scan prescriptions, reports and notes. AI builds a structured medical history and links it to UHID.",
       microcopy: "OCR + clinical data extraction.",
       alt: "Document with scan lines for OCR processing"
@@ -29,7 +29,7 @@ const HowItWorks = () => {
     {
       id: 3,
       icon: FiMonitor,
-      title: "Doctor sees everything on Swasya Sync",
+      title: "Doctor sees everything on Sahayak Sync",
       description: "Before the patient enters, the doctor views the AI-generated history, live transcript and summary.",
       microcopy: "Walk in prepared — diagnose faster.",
       alt: "Desktop dashboard showing patient information"
@@ -37,7 +37,7 @@ const HowItWorks = () => {
     {
       id: 4,
       icon: FiMap,
-      title: "Admin monitors with Swasya Map",
+      title: "Admin monitors with Sahayak Map",
       description: "Admins and doctors see regional hotspots and trends that help prioritize resources.",
       microcopy: "Visual outbreak analytics for preventive action.",
       alt: "Map with heat spots showing regional data"
@@ -56,7 +56,7 @@ const HowItWorks = () => {
             className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight tracking-tight" 
             style={{color: colors.textPrimary}}
           >
-            How Swasya AI fits into your{' '}
+            How Sahayak fits into your{' '}
             <span className="font-medium" style={{color: colors.primary}}>clinic workflow</span>
           </h2>
           

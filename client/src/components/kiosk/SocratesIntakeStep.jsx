@@ -8,7 +8,9 @@ import {
   FiAlertTriangle, 
   FiLoader, 
   FiSend,
-  FiCornerDownLeft
+  FiCornerDownLeft,
+  FiUploadCloud,
+  FiFileText
 } from 'react-icons/fi';
 import { speechService } from '../../utils/speech';
 import { kioskAPI } from '../../utils/api';
@@ -20,11 +22,13 @@ const SocratesIntakeStep = ({
   mode,
   language,
   onComplete,
-  onEmergencyTriggered
+  onEmergencyTriggered,
+  onSkipToDocuments
 }) => {
   const isHindi = language === 'hi';
 
   const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [activeSessionId, setActiveSessionId] = useState(sessionId);
   const [progressPercent, setProgressPercent] = useState(15);
   const [stepNumber, setStepNumber] = useState(1);
   const [totalSteps, setTotalSteps] = useState(10);
@@ -50,6 +54,9 @@ const SocratesIntakeStep = ({
       setLoading(true);
       try {
         const res = await kioskAPI.startSession(patient, mode, language);
+        if (res.session_id) {
+          setActiveSessionId(res.session_id);
+        }
         if (res.question) {
           setCurrentQuestion(res.question);
           setProgressPercent(res.progress_percent || 15);
@@ -98,6 +105,21 @@ const SocratesIntakeStep = ({
     speechService.speak(textToSpeak, language);
   };
 
+  // Direct skip to document upload without completing or answering questions
+  const handleSkipToDocuments = () => {
+    speechService.stopSpeaking();
+    speechService.stopListening();
+    setIsListening(false);
+    if (onSkipToDocuments) {
+      onSkipToDocuments({
+        sessionId: activeSessionId || sessionId,
+        collectedData,
+        chiefComplaint: chiefComplaint || (collectedData && Object.values(collectedData)[0]) || '',
+        socrates_responses: collectedData
+      });
+    }
+  };
+
   // Submit an answer (from touch chip, voice transcript, or scale)
   const handleAnswer = async (answerValue) => {
     if (!answerValue || loading) return;
@@ -129,7 +151,7 @@ const SocratesIntakeStep = ({
     setLoading(true);
 
     try {
-      const res = await kioskAPI.sendMessage(sessionId, answerValue);
+      const res = await kioskAPI.sendMessage(activeSessionId || sessionId, answerValue);
 
       // Check emergency red flag alert
       if (res.emergency_alert && res.emergency_alert.is_emergency) {
@@ -151,6 +173,7 @@ const SocratesIntakeStep = ({
           language
         );
         onComplete({
+          sessionId: activeSessionId || sessionId,
           collectedData: { ...collectedData, [currentQuestion?.step_key]: answerValue },
           chiefComplaint: chiefComplaint || answerValue,
           socrates_responses: res.socrates_data || collectedData
@@ -229,10 +252,10 @@ const SocratesIntakeStep = ({
 
       {/* Progress Bar & Header */}
       <div className="mb-6 space-y-2">
-        <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
+        <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-white uppercase tracking-wider">
+            <span className="w-2.5 h-2.5 rounded-full bg-sky-600 animate-pulse" />
+            <span className="text-slate-900 font-bold uppercase tracking-wider">
               {mode === 'AYUSH' ? '🌿 AYUSH Dashavidha Pariksha' : '🩺 SOCRATES Clinical Intake'}
             </span>
           </div>
@@ -241,24 +264,44 @@ const SocratesIntakeStep = ({
           </span>
         </div>
 
-        <div className="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+        <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 ease-out"
+            className="h-full bg-sky-600 transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
 
+      {/* Direct Upload Shortcut Banner: Allows patients to skip questions and directly upload documents */}
+      <div className="mb-4 flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-2xl bg-sky-50 border-2 border-sky-200 shadow-xs">
+        <div className="flex items-center gap-2.5 text-xs text-slate-700">
+          <span className="w-2 h-2 rounded-full bg-sky-600 shrink-0" />
+          <span>
+            {isHindi
+              ? 'सवालों के जवाब देना ऐच्छिक है — यदि आपके पास पुरानी पर्ची या रिपोर्ट है, तो सीधे अपलोड करें:'
+              : 'Questionnaire is optional — if you have old prescriptions or lab reports, you can skip questions and upload directly:'}
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={handleSkipToDocuments}
+          className="w-full sm:w-auto px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 shrink-0"
+        >
+          <FiUploadCloud size={16} />
+          <span>{isHindi ? '📄 पर्ची है? सीधे अपलोड करें (सवाल छोड़ें) ➔' : '📄 Have Records? Skip & Upload Directly ➔'}</span>
+        </button>
+      </div>
+
       {/* Question Card */}
       {currentQuestion && (
-        <div className="bg-slate-900/90 border-2 border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-md mb-6">
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm mb-4">
           {/* Question Title & Audio Button */}
           <div className="flex items-start justify-between gap-4 mb-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30">
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
                 {currentQuestion.step_key?.replace('_', ' ').toUpperCase()}
               </span>
-              <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mt-3 leading-snug">
+              <h2 className="text-2xl md:text-4xl font-bold text-slate-900 tracking-tight mt-3 leading-snug">
                 {isHindi ? currentQuestion.title_hi : currentQuestion.title_en}
               </h2>
             </div>
@@ -266,7 +309,7 @@ const SocratesIntakeStep = ({
             <button
               type="button"
               onClick={() => playQuestionAudio(currentQuestion)}
-              className="p-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 transition-colors shrink-0 active:scale-95 shadow-lg"
+              className="p-3.5 rounded-2xl bg-slate-100 hover:bg-sky-50 text-sky-700 border border-slate-200 transition-colors shrink-0 active:scale-95"
               title="Repeat audio prompt"
             >
               <FiVolume2 size={26} />
@@ -282,14 +325,14 @@ const SocratesIntakeStep = ({
                   type="button"
                   disabled={loading}
                   onClick={() => handleAnswer(chip.value || (isHindi ? chip.text_hi : chip.text_en))}
-                  className="group relative p-5 rounded-2xl bg-slate-950/80 hover:bg-gradient-to-br hover:from-slate-900 hover:to-slate-800 border-2 border-slate-800 hover:border-emerald-500 text-left transition-all duration-200 transform active:scale-98 shadow-md hover:shadow-xl hover:shadow-emerald-500/10 flex items-center justify-between gap-4"
+                  className="group relative p-5 rounded-2xl bg-slate-50 hover:bg-sky-50/80 border-2 border-slate-200 hover:border-sky-500 text-left transition-all duration-200 transform active:scale-98 shadow-xs hover:shadow-md flex items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-4">
-                    <span className="text-3xl sm:text-4xl group-hover:scale-110 transition-transform">
+                    <span className="text-3xl sm:text-4xl group-hover:scale-105 transition-transform">
                       {chip.icon || '👉'}
                     </span>
                     <div>
-                      <div className="text-lg sm:text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
+                      <div className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-sky-700 transition-colors">
                         {isHindi ? chip.text_hi : chip.text_en}
                       </div>
                       {isHindi && chip.text_en && (
@@ -300,7 +343,7 @@ const SocratesIntakeStep = ({
                     </div>
                   </div>
 
-                  <div className="w-8 h-8 rounded-full bg-slate-800 group-hover:bg-emerald-500 text-slate-400 group-hover:text-slate-950 flex items-center justify-center transition-colors shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-slate-200 group-hover:bg-sky-600 text-slate-600 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
                     <FiArrowRight size={16} />
                   </div>
                 </button>
@@ -309,18 +352,18 @@ const SocratesIntakeStep = ({
           )}
 
           {/* DUAL INPUT OPTION B: Live Voice Microphone Section */}
-          <div className="pt-6 border-t border-slate-800">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-inner">
+          <div className="pt-6 border-t border-slate-200">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200">
               <div className="flex items-center gap-4 w-full sm:w-auto">
                 {/* Pulsing Mic Button */}
                 <button
                   type="button"
                   onClick={handleToggleMic}
                   disabled={loading}
-                  className={`relative p-5 rounded-2xl flex items-center justify-center text-white transition-all transform active:scale-95 shadow-xl ${
+                  className={`relative p-5 rounded-2xl flex items-center justify-center text-white transition-all transform active:scale-95 shadow-md ${
                     isListening
-                      ? 'bg-red-600 ring-8 ring-red-500/30 animate-pulse'
-                      : 'bg-gradient-to-br from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950'
+                      ? 'bg-red-600 ring-8 ring-red-200 animate-pulse'
+                      : 'bg-sky-600 hover:bg-sky-700 text-white'
                   }`}
                   title={isListening ? 'Stop listening' : 'Speak your answer'}
                 >
@@ -332,11 +375,11 @@ const SocratesIntakeStep = ({
                 </button>
 
                 <div>
-                  <div className="text-base font-bold text-white flex items-center gap-2">
+                  <div className="text-base font-bold text-slate-900 flex items-center gap-2">
                     <span>{isListening ? (isHindi ? 'सुन रहा हूँ... बोलिए' : 'Listening... Speak now') : (isHindi ? 'या बोलकर उत्तर दें' : 'Or Speak Your Answer')}</span>
                     {isListening && <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />}
                   </div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-xs text-slate-500">
                     {isHindi
                       ? 'माइक दबाएं और हिंदी या अंग्रेजी में अपनी बात कहें'
                       : 'Tap mic button and speak in Hindi or English'}
@@ -356,13 +399,13 @@ const SocratesIntakeStep = ({
                     }
                   }}
                   placeholder={isHindi ? 'लिखकर उत्तर दें...' : 'Type answer...'}
-                  className="flex-1 py-3 px-4 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm focus:border-emerald-500 focus:outline-none"
+                  className="flex-1 py-3 px-4 bg-white border border-slate-300 rounded-xl text-slate-900 text-sm focus:border-sky-600 focus:outline-none shadow-xs"
                 />
                 <button
                   type="button"
                   onClick={() => customText.trim() && handleAnswer(customText.trim())}
                   disabled={!customText.trim() || loading}
-                  className="p-3 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 rounded-xl font-bold transition-all shrink-0"
+                  className="p-3 bg-sky-600 hover:bg-sky-700 disabled:opacity-40 text-white rounded-xl font-bold transition-all shrink-0 active:scale-95 shadow-xs"
                 >
                   <FiSend size={16} />
                 </button>
@@ -371,13 +414,26 @@ const SocratesIntakeStep = ({
 
             {/* Live speech transcription display */}
             {liveTranscript && (
-              <div className="mt-3 p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-emerald-300 text-sm italic animate-fadeIn">
+              <div className="mt-3 p-3 rounded-xl bg-sky-50 border border-sky-200 text-sky-900 text-sm font-medium italic animate-fadeIn">
                 "{liveTranscript}"
               </div>
             )}
           </div>
         </div>
       )}
+
+      {/* Alternate bottom direct skip option */}
+      <div className="text-center py-2 mb-4">
+        <button
+          type="button"
+          onClick={handleSkipToDocuments}
+          className="text-xs text-slate-600 hover:text-sky-700 underline underline-offset-4 transition-colors font-medium"
+        >
+          {isHindi 
+            ? 'सवालों के उत्तर नहीं देना चाहते? सीधे पुरानी पर्ची या टेस्ट रिपोर्ट अपलोड करें ➔' 
+            : 'Prefer not to answer questions? Skip directly to upload documents ➔'}
+        </button>
+      </div>
 
       {/* Loading indicator */}
       {loading && (

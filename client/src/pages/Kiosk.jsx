@@ -71,6 +71,19 @@ const Kiosk = () => {
     setCurrentStep('dialogue');
   };
 
+  // Direct Track: Skip questions and go directly to document scan/upload
+  const handleDirectUpload = () => {
+    setCurrentStep('document');
+  };
+
+  // Skip questions midway during dialogue
+  const handleSkipToDocuments = (partialDialogueData) => {
+    if (partialDialogueData) {
+      setDialogueResult(partialDialogueData);
+    }
+    setCurrentStep('document');
+  };
+
   // Step 5 -> Step 6 (Dialogue Completed)
   const handleDialogueComplete = (dialogueData) => {
     setDialogueResult(dialogueData);
@@ -78,29 +91,65 @@ const Kiosk = () => {
   };
 
   // Step 6 -> Step 7 (Document Handled -> Finish & Generate Summary)
-  const handleDocumentComplete = async (docFile) => {
+  const handleDocumentComplete = async (docsPayload) => {
+    let docFile = null;
+    let extractedTimeline = null;
+    let documentsList = [];
+
+    if (docsPayload && docsPayload.extractedTimeline) {
+      extractedTimeline = docsPayload.extractedTimeline;
+      documentsList = docsPayload.documentsList || [];
+      docFile = documentsList[0]?.file || null;
+    } else {
+      docFile = docsPayload;
+    }
+
     setUploadedDocument(docFile);
-    await finalizeIntake(docFile);
+    await finalizeIntake(docFile, extractedTimeline, documentsList);
   };
 
   const handleDocumentSkip = async () => {
     setUploadedDocument(null);
-    await finalizeIntake(null);
+    await finalizeIntake(null, null, []);
   };
 
-  const finalizeIntake = async (docFile) => {
+  const finalizeIntake = async (docFile, extractedTimeline = null, documentsList = []) => {
     setIsSubmittingSummary(true);
+    const hasAnswers = Boolean(
+      dialogueResult?.collectedData && 
+      Object.keys(dialogueResult.collectedData).length > 0
+    );
+    const hasDocs = Boolean(docFile || (documentsList && documentsList.length > 0));
+    const primaryExtractedDx = extractedTimeline?.all_diagnoses?.[0] || extractedTimeline?.timeline_events?.[0]?.diagnoses?.[0];
+    
+    const derivedComplaint = dialogueResult?.chiefComplaint || primaryExtractedDx || (
+      hasDocs 
+        ? (isHindi ? 'दस्तावेज़ व पुरानी पर्ची प्रस्तुति' : 'Clinical Consultation (Medical Records Attached)')
+        : (isHindi ? 'सामान्य परामर्श व पंजीकरण' : 'General Walk-in Consultation')
+    );
+
     try {
       const payload = {
-        session_id: `KIOSK_${Date.now().toString().slice(-6)}`,
+        session_id: dialogueResult?.sessionId || `KIOSK_${Date.now().toString().slice(-6)}`,
         patient_info: patientProfile || {
           name: 'Patient',
           age: 30,
           gender: 'other',
           abha_number: '91-5043-5666-3218'
         },
-        chief_complaint: dialogueResult?.chiefComplaint || 'General consultation',
-        socrates_responses: dialogueResult?.socrates_responses || dialogueResult?.collectedData || {},
+        patient: patientProfile,
+        chief_complaint: derivedComplaint,
+        socrates_responses: hasAnswers 
+          ? (dialogueResult?.socrates_responses || dialogueResult?.collectedData || {})
+          : {
+              intake_route: hasDocs ? 'DIRECT_DOCUMENT_UPLOAD' : 'DIRECT_WALK_IN',
+              document_attached: hasDocs,
+              document_count: documentsList.length || (docFile ? 1 : 0),
+              extracted_diagnoses: extractedTimeline?.all_diagnoses || [],
+              questions_answered: false
+            },
+        medical_timeline: extractedTimeline || null,
+        uploaded_documents: documentsList || [],
         mode: consultationMode,
         language: language
       };
@@ -110,23 +159,37 @@ const Kiosk = () => {
       setCurrentStep('summary');
     } catch (err) {
       console.warn('Finalize fallback:', err);
-      // Fallback summary result
+      // Fallback summary result using actual extracted clinical findings
+      const extractedMedsList = (extractedTimeline?.current_medications || []).map(m => 
+        typeof m === 'object' ? `${m.name} ${m.dosage || ''}`.trim() : String(m)
+      );
+
       setSummaryResult({
         success: true,
-        token_number: 7,
-        queue_id: 'Q_DEMO_07',
+        token_number: Math.floor(Math.random() * 20) + 1,
+        queue_id: `Q_DEMO_${Date.now().toString().slice(-4)}`,
         priority: 'normal',
         estimated_wait_minutes: 10,
         structured_summary: {
-          chief_complaint: dialogueResult?.chiefComplaint || 'Chest pain / acute discomfort',
-          history_of_present_illness: 'Patient reported symptoms through MediKiosk self-service intake.',
-          past_medical_surgical_history: 'No prior records uploaded.',
-          drug_allergy_history: { current_medications: ['None documented'], known_allergies: ['NKDA'] },
+          chief_complaint: derivedComplaint,
+          history_of_present_illness: hasAnswers
+            ? 'Patient reported symptoms through MediKiosk self-service intake.'
+            : (primaryExtractedDx 
+                ? `Patient presented with clinical condition: ${primaryExtractedDx}. Prior medical records and prescriptions were uploaded and digitized.`
+                : 'Patient uploaded clinical records directly at MediKiosk for in-person physician evaluation.'),
+          past_medical_surgical_history: hasDocs 
+            ? (documentsList.length > 1 ? `${documentsList.length} clinical documents uploaded.` : `Prescription/document attached: ${docFile?.name || 'Attached record'}`)
+            : 'No prior records uploaded.',
+          drug_allergy_history: { 
+            current_medications: extractedMedsList.length > 0 ? extractedMedsList : ['Pending physician review of uploaded records'], 
+            known_allergies: ['NKDA'] 
+          },
           family_history: 'Non-contributory',
           personal_history: 'Standard diet, non-smoker',
-          review_of_systems: { cardiovascular: 'Reported pain' },
-          prior_investigations_summary: 'None'
-        }
+          review_of_systems: { note: 'Review of systems pending physician clinical examination' },
+          prior_investigations_summary: extractedTimeline?.summary || (hasDocs ? `${documentsList.length || 1} document(s) digitized with AI OCR` : 'None uploaded')
+        },
+        medical_timeline: extractedTimeline || null
       });
       setCurrentStep('summary');
     } finally {
@@ -144,9 +207,9 @@ const Kiosk = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950 font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-sky-600 selection:text-white font-sans">
       {/* Top Universal Kiosk Navbar */}
-      <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 px-6 py-4">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-6 py-4 shadow-xs">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Brand & Govt Logo */}
           <div className="flex items-center gap-4">
@@ -156,20 +219,20 @@ const Kiosk = () => {
               className="flex items-center gap-3 text-left group"
               title="Return to home"
             >
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-sky-600 flex items-center justify-center text-white font-bold text-xl shadow-sm group-hover:bg-sky-700 transition-colors">
                 +
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold tracking-tight text-white group-hover:text-emerald-400 transition-colors">
+                  <span className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-sky-700 transition-colors">
                     MediKiosk
                   </span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    Self-Service
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+                    Clinical Intake
                   </span>
                 </div>
-                <div className="text-xs text-slate-400">
-                  Swasya AI • National Health Authority Standard
+                <div className="text-xs text-slate-500">
+                  Sahayak • National Health Authority Standard
                 </div>
               </div>
             </button>
@@ -183,8 +246,8 @@ const Kiosk = () => {
               onClick={handleToggleSound}
               className={`p-2.5 rounded-xl border transition-colors ${
                 isMuted
-                  ? 'bg-slate-900 text-slate-500 border-slate-800'
-                  : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                  ? 'bg-slate-100 text-slate-400 border-slate-200'
+                  : 'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100'
               }`}
               title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
             >
@@ -194,9 +257,9 @@ const Kiosk = () => {
             {/* Emergency Hotline 108 */}
             <a
               href="tel:108"
-              className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold transition-colors"
+              className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold transition-colors"
             >
-              <FiPhoneCall size={14} className="animate-bounce" />
+              <FiPhoneCall size={14} />
               <span>Emergency 108</span>
             </a>
 
@@ -204,10 +267,10 @@ const Kiosk = () => {
             <button
               type="button"
               onClick={() => alert(isHindi ? 'नर्स सहायता मोड: कृपया सहायता काउंटर या नर्स ऐप का उपयोग करें।' : 'Nurse Assist Mode: Staff member can guide the intake on mobile.')}
-              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-medium transition-colors"
+              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-medium transition-colors"
               title="Assisted Intake for elderly or differently-abled patients"
             >
-              <FiHelpCircle size={14} className="text-blue-400" />
+              <FiHelpCircle size={14} className="text-sky-600" />
               <span>{isHindi ? 'नर्स सहायता (वैकल्पिक)' : 'Nurse Assist'}</span>
             </button>
 
@@ -215,7 +278,7 @@ const Kiosk = () => {
             <button
               type="button"
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md"
+              className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition-all shadow-sm"
             >
               Doctor Portal →
             </button>
@@ -257,6 +320,7 @@ const Kiosk = () => {
             language={language}
             onNext={handleModeSelected}
             onBack={() => setCurrentStep('consent')}
+            onDirectUpload={handleDirectUpload}
           />
         )}
 
@@ -268,14 +332,18 @@ const Kiosk = () => {
             language={language}
             onComplete={handleDialogueComplete}
             onEmergencyTriggered={(alert) => console.log('Emergency flagged:', alert)}
+            onSkipToDocuments={handleSkipToDocuments}
           />
         )}
 
         {currentStep === 'document' && (
           <DocumentScanStep
             language={language}
+            patient={patientProfile}
             onComplete={handleDocumentComplete}
             onSkip={handleDocumentSkip}
+            hasAnsweredQuestions={Boolean(dialogueResult?.collectedData && Object.keys(dialogueResult.collectedData).length > 0)}
+            onGoToDialogue={() => setCurrentStep('dialogue')}
           />
         )}
 
@@ -302,13 +370,13 @@ const Kiosk = () => {
       </main>
 
       {/* Footer / Emergency Note */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-3 px-6 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl mx-auto w-full">
+      <footer className="border-t border-slate-200 bg-white py-3 px-6 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl mx-auto w-full">
         <div>
           MediKiosk v2.0 • ABDM M1/M2/M3 Compliant • Primary Healthcare Center
         </div>
         <div className="flex items-center gap-4 text-[11px]">
-          <span className="text-emerald-400">● Live Dual-Input Audio Ready</span>
-          <span className="text-slate-400">Privacy & Ephemeral Audio Purge Active</span>
+          <span className="text-sky-700 font-medium">● Live Dual-Input Audio Ready</span>
+          <span className="text-slate-500">Privacy & Ephemeral Audio Purge Active</span>
         </div>
       </footer>
     </div>

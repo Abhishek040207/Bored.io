@@ -51,7 +51,7 @@ const MobileAppCTA = () => {
             <span className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-white/20 text-white">
               Optional Staff Assisted Mode
             </span>
-            <h3 className="text-2xl font-bold mt-2 text-white">Swasya Nurse Assist App</h3>
+            <h3 className="text-2xl font-bold mt-2 text-white">Sahayak Nurse Assist App</h3>
           </div>
 
           {/* Main content */}

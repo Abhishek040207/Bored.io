@@ -42,7 +42,7 @@ const SwasyaMap = () => {
             className="text-lg sm:text-xl font-ptserif font-medium"
             style={{ color: colors.textSecondary }}
           >
-            Swasya AI
+            Sahayak
           </h1>
           
           {/* Desktop Dashboard Label & Navigation */}
@@ -55,7 +55,7 @@ const SwasyaMap = () => {
               className="text-sm font-medium"
               style={{ color: colors.primary }}
             >
-              Swasya Map
+              Sahayak Map
             </span>
           </div>
           
@@ -135,7 +135,7 @@ const SwasyaMap = () => {
             className="text-2xl font-ptserif font-medium mb-4"
             style={{ color: colors.textPrimary }}
           >
-            Swasya Map
+            Sahayak Map
           </h2>
           <p 
             className="text-lg"

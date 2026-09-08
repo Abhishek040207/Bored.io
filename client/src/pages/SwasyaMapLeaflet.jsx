@@ -249,7 +249,7 @@ const SwasyaMapLeaflet = () => {
             className="text-lg sm:text-xl font-ptserif font-medium"
             style={{ color: colors.textSecondary }}
           >
-            Swasya AI
+            Sahayak
           </h1>
           
           {/* Desktop Dashboard Label & Navigation */}

@@ -11,10 +11,11 @@ Provides endpoints for the patient-operated MediKiosk tablet:
 """
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Body
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 import uuid
 import os
+import json
 
 from app.services.abdm_service import abdm_service
 from app.services.red_flag_service import red_flag_service
@@ -23,10 +24,13 @@ from app.services.drug_interaction_service import drug_interaction_service
 from app.services.ai_service import generate_structured_clinical_intake, transcribe_audio, extract_prescription
 from app.services.mongodb_storage import mongodb_storage
 from app.services.storage_service import storage
+from app.services.mongo_service import mongo_service
+from app.services.timeline_service import generate_comprehensive_timeline
 
 router = APIRouter(prefix="/kiosk", tags=["MediKiosk Patient Self-Service"])
 
-UPLOADS_DIR = "/app/data/uploads"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+UPLOADS_DIR = os.path.join(BASE_DIR, "data", "uploads")
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 
@@ -161,6 +165,60 @@ async def upload_kiosk_audio(
     return turn_result
 
 
+# ==================== MODULE B: MEDICAL DOCUMENT DIGITIZATION & INTELLIGENCE ====================
+
+@router.post("/documents/analyze")
+async def analyze_kiosk_documents(
+    files: Optional[List[UploadFile]] = File(None),
+    patient_info_json: Optional[str] = Form(None)
+):
+    """
+    Module B — Medical Document Digitization & Intelligence:
+    1. Intelligent extraction: diagnoses, prescribed medications with dosages,
+       investigation results with values & reference ranges, procedure/surgery history
+    2. Chronological organization: automatically dates and orders documents into medical timeline
+    3. Abnormal-value highlighting: flags out-of-range lab values and potential drug interactions
+    """
+    patient_info = {}
+    if patient_info_info := patient_info_json:
+        try:
+            patient_info = json.loads(patient_info_info)
+        except Exception:
+            pass
+
+    processed_docs = []
+    if files:
+        for f in files:
+            try:
+                ext = f.filename.split('.')[-1].lower() if f.filename else "jpg"
+                temp_filename = f"kiosk_scan_{uuid.uuid4().hex[:8]}.{ext}"
+                temp_path = os.path.join(UPLOADS_DIR, temp_filename)
+                content = await f.read()
+                with open(temp_path, "wb") as buf:
+                    buf.write(content)
+
+                # Extract entities via Gemini Vision OCR
+                extracted = await extract_prescription(temp_path)
+                processed_docs.append({
+                    "document_id": f"DOC_{uuid.uuid4().hex[:8].upper()}",
+                    "filename": f.filename,
+                    "extracted_data": extracted
+                })
+            except Exception as e:
+                print(f"Error processing kiosk document {f.filename}: {e}")
+
+    # Generate comprehensive timeline with chronological ordering & abnormal highlighting
+    timeline = await generate_comprehensive_timeline(processed_docs, patient_info)
+
+    return {
+        "success": True,
+        "message": "Medical documents successfully digitized and organized",
+        "document_count": len(processed_docs) or len(timeline.get("timeline_events", [])),
+        "documents": processed_docs,
+        "timeline": timeline
+    }
+
+
 # ==================== COMPLETION & SUMMARY GENERATION ====================
 
 @router.post("/session/complete")
@@ -176,26 +234,46 @@ async def complete_kiosk_session(payload: Dict[str, Any] = Body(...)):
     session_id = payload.get("session_id")
     session = dialogue_manager.sessions.get(session_id)
     
+    medical_timeline = payload.get("medical_timeline")
+    uploaded_documents = payload.get("uploaded_documents", [])
+
     if not session:
-        # Fallback dummy session if direct completion is invoked
+        # Fallback session if direct completion is invoked
         session = {
             "session_id": session_id or f"KIOSK_{uuid.uuid4().hex[:8].upper()}",
             "patient_info": payload.get("patient_info", {}),
-            "chief_complaint": payload.get("chief_complaint", "General consultation"),
+            "chief_complaint": payload.get("chief_complaint", ""),
             "socrates_responses": payload.get("socrates_responses", {}),
+            "medical_timeline": medical_timeline,
+            "uploaded_documents": uploaded_documents,
             "raw_transcripts": [],
             "red_flags": [],
             "mode": payload.get("mode", "ALLOPATHIC"),
             "language": payload.get("language", "hi")
         }
+    else:
+        if medical_timeline:
+            session["medical_timeline"] = medical_timeline
+        if uploaded_documents:
+            session["uploaded_documents"] = uploaded_documents
+
+    # If chief complaint is empty or generic and we have diagnoses from uploaded documents, use the primary diagnosis
+    timeline_dx = (medical_timeline or {}).get("all_diagnoses", [])
+    if (not session.get("chief_complaint") or "direct" in session.get("chief_complaint", "").lower() or "general" in session.get("chief_complaint", "").lower()) and timeline_dx:
+        session["chief_complaint"] = timeline_dx[0]
 
     patient_info = session.get("patient_info") or payload.get("patient_info") or payload.get("patient") or {}
     
-    # 1. Synthesize 8-section Clinical Intake Summary
-    clinical_summary = await generate_structured_clinical_intake(session, patient_info)
+    # 1. Synthesize 8-section Clinical Intake Summary (Synthesizing conversational + digitized document intelligence)
+    clinical_summary = await generate_structured_clinical_intake(session, patient_info, medical_timeline)
     
-    # 2. Check drug interactions on reported meds
+    # 2. Check drug interactions on reported meds and uploaded meds
     medications = clinical_summary.get("drug_allergy_history", {}).get("current_medications", [])
+    if medical_timeline and medical_timeline.get("current_medications"):
+        for m in medical_timeline["current_medications"]:
+            m_name = m.get("name") if isinstance(m, dict) else str(m)
+            if m_name and m_name not in medications:
+                medications.append(m_name)
     drug_interactions = drug_interaction_service.check_drug_interactions(medications)
     clinical_summary["detected_drug_interactions"] = drug_interactions
 
@@ -226,8 +304,25 @@ async def complete_kiosk_session(payload: Dict[str, Any] = Body(...)):
         except Exception:
             pass
 
-    # 4. Determine Queue Priority based on Red Flags
-    has_red_flags = len(session.get("red_flags", [])) > 0 or len(clinical_summary.get("clinical_red_flags", [])) > 0
+    # 4. Determine Queue Priority based on Genuine Life-Threatening Red Flags
+    # Routine headaches, body aches, mild fevers are strictly EXCLUDED from emergency STAT priority
+    valid_red_flags = []
+    for rf in session.get("red_flags", []):
+        cond = str(rf.get("condition", "")).lower()
+        if "headache" in cond and not any(s in cond for s in ["stroke", "hemorrhage", "paralysis"]):
+            continue
+        valid_red_flags.append(rf)
+
+    summary_red_flags = []
+    for rf in clinical_summary.get("clinical_red_flags", []):
+        rf_str = str(rf).strip().lower()
+        if not rf_str or "none" in rf_str or "nil" in rf_str or "no red" in rf_str or "no acute" in rf_str or rf_str in ["no", "n/a", "standard"]:
+            continue
+        if "headache" in rf_str and not any(s in rf_str for s in ["stroke", "hemorrhage", "paralysis"]):
+            continue
+        summary_red_flags.append(rf)
+
+    has_red_flags = len(valid_red_flags) > 0 or len(summary_red_flags) > 0
     priority = "emergency_stat" if has_red_flags else "normal"
 
     # Add to Live Queue
@@ -282,6 +377,34 @@ async def complete_kiosk_session(payload: Dict[str, Any] = Body(...)):
     except Exception:
         pass
 
+    # 6. If Medical Timeline was digitized from documents, link it to patient record
+    medical_timeline = payload.get("medical_timeline")
+    if medical_timeline:
+        try:
+            timeline_record = {
+                "patient_id": patient_id,
+                "patient_name": patient_record["name"],
+                "batch_id": f"KIOSK_{uuid.uuid4().hex[:8].upper()}",
+                "generated_at": datetime.now().isoformat(),
+                "total_documents": len(payload.get("uploaded_documents", [])) or len(medical_timeline.get("timeline_events", [])) or 1,
+                **medical_timeline
+            }
+            await mongo_service.save_timeline(timeline_record)
+
+            history_id = f"TIMELINE_{uuid.uuid4().hex[:8].upper()}"
+            await mongodb_storage.add_history(patient_id, {
+                "history_id": history_id,
+                "patient_id": patient_id,
+                "created_at": datetime.now().isoformat(),
+                "type": "comprehensive_timeline",
+                "timeline_summary": medical_timeline.get("summary"),
+                "event_count": len(medical_timeline.get("timeline_events", [])),
+                "current_medications_count": len(medical_timeline.get("current_medications", []))
+            })
+            print(f"📋 Attached Medical Timeline to patient {patient_id}")
+        except Exception as e:
+            print(f"⚠️ Could not save timeline to mongo_service: {e}")
+
     print(f"✅ MediKiosk Intake completed: Token #{token_number} for {patient_record['name']} (Priority: {priority})")
 
     return {
@@ -294,6 +417,7 @@ async def complete_kiosk_session(payload: Dict[str, Any] = Body(...)):
         "priority": priority,
         "has_red_flags": has_red_flags,
         "structured_summary": clinical_summary,
+        "medical_timeline": medical_timeline,
         "patient_audio_confirmation": clinical_summary.get("patient_facing_audio_confirmation"),
         "estimated_wait_minutes": 5 if has_red_flags else 15
     }
@@ -362,3 +486,4 @@ async def cleanup_kiosk_session(payload: Dict[str, Any] = Body(...)):
         "session_id": session_id,
         "message": "Temporary session data and transient state successfully purged."
     }
+

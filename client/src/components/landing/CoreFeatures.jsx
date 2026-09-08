@@ -15,7 +15,7 @@ const CoreFeatures = () => {
     {
       id: 1,
       icon: FiMic,
-      title: "Swasya Listen",
+      title: "Sahayak Listen",
       description: "Real-time multi-language transcription and one-line medical summaries.",
       microcopy: "Converts conversation to concise clinical notes.",
       cta: "Try voice capture",
@@ -24,7 +24,7 @@ const CoreFeatures = () => {
     {
       id: 2,
       icon: IoMdQrScanner,
-      title: "Swasya Scan",
+      title: "Sahayak Scan",
       description: "OCR scanning that converts prescriptions and reports into structured history.",
       microcopy: "No more lost paper reports.",
       cta: "See OCR demo",
@@ -33,7 +33,7 @@ const CoreFeatures = () => {
     {
       id: 3,
       icon: FiMonitor,
-      title: "Swasya Sync",
+      title: "Sahayak Sync",
       description: "Live web dashboard showing queue, transcripts, summaries and annotated records.",
       microcopy: "Doctor-ready patient context at a glance.",
       cta: "View dashboard",
@@ -42,7 +42,7 @@ const CoreFeatures = () => {
     {
       id: 4,
       icon: FiMap,
-      title: "Swasya Map",
+      title: "Sahayak Map",
       description: "Localized outbreak maps and hotspot alerts for doctors and administrators.",
       microcopy: "Early detection and targeted responses.",
       cta: "Explore maps",

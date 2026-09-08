@@ -278,6 +278,24 @@ export const kioskAPI = {
     return handleResponse(response);
   },
 
+  // Module B: Medical Document Digitization & Intelligence
+  analyzeDocuments: async (files = [], patientInfo = null) => {
+    const formData = new FormData();
+    if (files && files.length > 0) {
+      files.forEach((f) => {
+        formData.append('files', f);
+      });
+    }
+    if (patientInfo) {
+      formData.append('patient_info_json', JSON.stringify(patientInfo));
+    }
+    const response = await fetch(`${BASE_URL}/kiosk/documents/analyze`, {
+      method: 'POST',
+      body: formData
+    });
+    return handleResponse(response);
+  },
+
   // Ephemeral cleanup
   cleanupSession: async (sessionId) => {
     const response = await fetch(`${BASE_URL}/kiosk/session/cleanup`, {
@@ -286,7 +304,73 @@ export const kioskAPI = {
       body: JSON.stringify({ session_id: sessionId })
     });
     return handleResponse(response);
-  }
+  },
+
+  // Speech-to-Text (ASR)
+  transcribeAudio: async (audioBlob, language = 'hi', patientId = null) => {
+    const formData = new FormData();
+    const ext = audioBlob.type?.includes('wav') ? 'wav' : 'webm';
+    formData.append('file', audioBlob, `speech_recording.${ext}`);
+    formData.append('language', language);
+    if (patientId) {
+      formData.append('patient_id', patientId);
+    }
+    const response = await fetch(`${BASE_URL}/kiosk/speech/transcribe`, {
+      method: 'POST',
+      body: formData
+    });
+    return handleResponse(response);
+  },
+
+  // Supported languages
+  getSpeechLanguages: async () => {
+    const response = await fetch(`${BASE_URL}/kiosk/speech/languages`);
+    return handleResponse(response);
+  },
+
+  // NMT - Translate text between Indian languages
+  translateText: async (text, sourceLang = 'hi', targetLang = 'en') => {
+    const response = await fetch(`${BASE_URL}/kiosk/translate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: text,
+        source_language: sourceLang,
+        target_language: targetLang
+      })
+    });
+    return handleResponse(response);
+  },
+
+  // TTS - Convert text to natural Indian language speech
+  textToSpeech: async (text, language = 'hi', gender = 'female') => {
+    const response = await fetch(`${BASE_URL}/kiosk/speech/tts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: text,
+        language: language,
+        gender: gender
+      })
+    });
+    return handleResponse(response);
+  },
+
+  // Chained: Translate + Speak in target language
+  translateAndSpeak: async (text, sourceLang = 'en', targetLang = 'hi', gender = 'female') => {
+    const response = await fetch(`${BASE_URL}/kiosk/translate-and-speak`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: text,
+        source_language: sourceLang,
+        target_language: targetLang,
+        gender: gender
+      })
+    });
+    return handleResponse(response);
+  },
+
 };
 
 // Utility functions for data transformation

@@ -1,8 +1,8 @@
 import React from 'react';
-import { FiActivity, FiFeather, FiCheck, FiVolume2, FiArrowRight } from 'react-icons/fi';
+import { FiActivity, FiFeather, FiCheck, FiVolume2, FiArrowRight, FiUploadCloud } from 'react-icons/fi';
 import { speechService } from '../../utils/speech';
 
-const ModeSelectStep = ({ selectedMode, onSelectMode, language, onNext, onBack }) => {
+const ModeSelectStep = ({ selectedMode, onSelectMode, language, onNext, onBack, onDirectUpload }) => {
   const isHindi = language === 'hi';
 
   const modes = [
@@ -49,17 +49,49 @@ const ModeSelectStep = ({ selectedMode, onSelectMode, language, onNext, onBack }
     <div className="max-w-4xl mx-auto py-6 px-4">
       {/* Step Header */}
       <div className="text-center space-y-3 mb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-xs font-semibold uppercase tracking-wider">
           Step 4 • चिकित्सा पद्धति चयन / Clinical Mode Selection
         </div>
-        <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+        <h1 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight">
           {isHindi ? 'परामर्श श्रेणी चुनें' : 'Select Consultation Mode'}
         </h1>
-        <p className="text-base text-slate-400 max-w-xl mx-auto font-light">
+        <p className="text-base text-slate-600 max-w-xl mx-auto font-normal">
           {isHindi
             ? 'अपनी स्वास्थ्य आवश्यकता अनुसार सामान्य ओपीडी अथवा आयुष / आयुर्वेदिक ओपीडी चुनें'
             : 'Choose between General Allopathic OPD or AYUSH / Ayurvedic intake'}
         </p>
+      </div>
+
+      {/* Direct Document Upload Option Banner */}
+      <div className="mb-8 p-5 rounded-2xl bg-sky-50/80 border-2 border-sky-200 transition-all shadow-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+          <div className="flex items-center gap-4 text-left">
+            <div className="w-12 h-12 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-2xl shrink-0 border border-sky-200">
+              <FiUploadCloud size={24} />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200 uppercase tracking-wider mb-1">
+                <span>{isHindi ? 'त्वरित पर्ची अपलोड' : 'Direct Upload Track'}</span>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">
+                {isHindi ? 'सिर्फ पुरानी पर्ची या टेस्ट रिपोर्ट सीधे अपलोड करें' : 'Upload Prescriptions or Reports Directly'}
+              </h3>
+              <p className="text-xs text-slate-600 max-w-lg mt-0.5 leading-relaxed">
+                {isHindi 
+                  ? 'सवालों के जवाब दिए बिना सीधे अपनी डॉक्टर पर्ची या लैब रिपोर्ट अपलोड करें। सवाल पूछना पूर्णतः ऐच्छिक है।'
+                  : 'Skip the symptom questionnaire and directly upload your prescription or medical reports to join the doctor queue.'}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onDirectUpload}
+            className="w-full md:w-auto px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 whitespace-nowrap shrink-0"
+          >
+            <FiUploadCloud size={17} />
+            <span>{isHindi ? 'सीधे दस्तावेज़ अपलोड करें ➔' : 'Direct Document Upload ➔'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Mode Cards */}
@@ -70,14 +102,14 @@ const ModeSelectStep = ({ selectedMode, onSelectMode, language, onNext, onBack }
             <div
               key={m.id}
               onClick={() => onSelectMode(m.id)}
-              className={`relative cursor-pointer rounded-3xl p-7 transition-all duration-300 border-2 transform active:scale-98 ${
+              className={`relative cursor-pointer rounded-2xl p-6 transition-all duration-200 border-2 transform active:scale-98 ${
                 isSelected
-                  ? 'bg-gradient-to-b from-slate-850 to-slate-900 border-emerald-500 ring-4 ring-emerald-500/20 shadow-2xl shadow-emerald-500/10 scale-[1.02]'
-                  : 'bg-slate-900/80 border-slate-800 hover:border-slate-700 hover:bg-slate-850/60'
+                  ? 'bg-white border-sky-600 ring-4 ring-sky-100 shadow-md scale-[1.01]'
+                  : 'bg-white border-slate-200 hover:border-sky-300 hover:shadow-md hover:bg-slate-50/50 shadow-sm'
               }`}
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700">
+                <div className="p-3 rounded-xl bg-sky-50 border border-sky-100 text-sky-700">
                   {m.icon}
                 </div>
 
@@ -85,43 +117,52 @@ const ModeSelectStep = ({ selectedMode, onSelectMode, language, onNext, onBack }
                   <button
                     type="button"
                     onClick={(e) => handlePlayVoice(e, m.audioText)}
-                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700"
-                    title="Read description aloud"
+                    className="p-2 rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 transition-colors border border-slate-200"
+                    title={isHindi ? 'ऑडियो सुनें' : 'Listen audio guidance'}
                   >
-                    <FiVolume2 size={20} className="text-emerald-400" />
+                    <FiVolume2 size={16} />
                   </button>
 
                   <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-colors ${
+                    className={`w-6 h-6 rounded-full flex items-center justify-center border transition-all ${
                       isSelected
-                        ? 'bg-emerald-500 border-emerald-500 text-slate-950 font-bold'
-                        : 'border-slate-600 bg-transparent'
+                        ? 'bg-sky-600 border-sky-600 text-white'
+                        : 'border-slate-300 bg-slate-50 text-transparent'
                     }`}
                   >
-                    {isSelected && <FiCheck size={16} className="stroke-[3]" />}
+                    <FiCheck size={14} />
                   </div>
                 </div>
               </div>
 
               <div>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                  {m.badge}
-                </span>
-                <h3 className="text-2xl font-bold text-white mt-2.5 tracking-tight">
-                  {m.title}
-                </h3>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-xl font-bold text-slate-900 tracking-tight">
+                    {m.title}
+                  </h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                    {m.badge}
+                  </span>
+                </div>
+                <div className="text-xs font-semibold text-sky-700 mb-2">
                   {m.subtitle}
-                </p>
-              </div>
+                </div>
 
-              <div className="mt-5 pt-4 border-t border-slate-800 space-y-2">
-                {m.features.map((feat, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-300">
-                    <span className="text-emerald-400">✓</span>
-                    <span>{feat}</span>
+                <div className="space-y-1.5 pt-3 border-t border-slate-100">
+                  <div className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+                    {isHindi ? 'मुख्य विशेषताएं:' : 'Key Features:'}
                   </div>
-                ))}
+                  <div className="flex flex-wrap gap-1.5">
+                    {m.features.map((feat, idx) => (
+                      <span
+                        key={idx}
+                        className="text-[11px] px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200 font-medium"
+                      >
+                        {feat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           );
@@ -129,23 +170,34 @@ const ModeSelectStep = ({ selectedMode, onSelectMode, language, onNext, onBack }
       </div>
 
       {/* CTA Footer */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-800">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-200">
         <button
           type="button"
           onClick={onBack}
-          className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+          className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm border border-slate-300 transition-colors flex items-center justify-center gap-2 shadow-xs"
         >
           ← {isHindi ? 'सहमति स्क्रीन पर वापस' : 'Back to Consent'}
         </button>
 
-        <button
-          type="button"
-          onClick={onNext}
-          className="w-full sm:w-80 py-4 px-8 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-lg shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2"
-        >
-          <span>{isHindi ? 'लक्षण जांच शुरू करें' : 'Start Intake Dialogue'}</span>
-          <FiArrowRight size={20} />
-        </button>
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={onDirectUpload}
+            className="w-full sm:w-auto py-3 px-5 rounded-xl bg-white hover:bg-sky-50 text-sky-700 font-semibold text-sm border border-sky-300 transition-all flex items-center justify-center gap-2 shadow-xs"
+          >
+            <FiUploadCloud size={16} />
+            <span>{isHindi ? 'सिर्फ पर्ची अपलोड करें' : 'Upload Docs Directly'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onNext}
+            className="w-full sm:w-80 py-3.5 px-6 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-base shadow-md shadow-sky-600/20 transition-all flex items-center justify-center gap-2 active:scale-98"
+          >
+            <span>{isHindi ? 'लक्षण जांच शुरू करें' : 'Start Intake Dialogue'}</span>
+            <FiArrowRight size={18} />
+          </button>
+        </div>
       </div>
     </div>
   );

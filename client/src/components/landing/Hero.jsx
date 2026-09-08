@@ -1,3 +1,5 @@
+
+
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { colors } from '../../utils/colors'
@@ -53,7 +55,7 @@ const Hero = () => {
               className="text-sm font-medium tracking-wide uppercase" 
               style={{color: colors.textTertiary}}
             >
-              Swasya AI
+              Sahayak
             </span>
           </div>
 
@@ -96,7 +98,7 @@ const Hero = () => {
               style={buttonStyles.secondary}
               onClick={() => navigate('/dashboard')}
             >
-              Doctor Dashboard (Swasya Sync)
+              Doctor Dashboard (Sahayak Sync)
             </button>
           </div>
 

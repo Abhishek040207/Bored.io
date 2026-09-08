@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { colors } from '../../utils/colors';
-import { FiUser, FiPhone, FiCalendar, FiActivity, FiClock, FiFileText, FiHeart, FiAlertCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiUser, FiPhone, FiCalendar, FiActivity, FiClock, FiFileText, FiHeart, FiAlertCircle, FiChevronDown, FiChevronUp, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
 import { CiPill } from "react-icons/ci";
 import { patientsAPI } from '../../utils/api';
 import { apiBaseUrl } from '../../utils/env';
@@ -347,6 +347,89 @@ const PatientHistory = ({ selectedPatient }) => {
               
               {expandedSections.timeline && (
                 <div className="relative">
+                  {/* Module B Feature: Abnormal Lab Findings Alert Banner */}
+                  {medicalTimeline.timeline.abnormal_lab_findings && medicalTimeline.timeline.abnormal_lab_findings.length > 0 && (
+                    <div className="mb-4 p-4 rounded-xl border border-red-500/40 bg-red-500/10">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 text-red-400 font-bold text-sm">
+                          <FiAlertTriangle size={18} />
+                          <span>🚨 Abnormal Out-of-Range Lab Values</span>
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/30 uppercase">
+                          Physician Attention Required
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {medicalTimeline.timeline.abnormal_lab_findings.map((finding, idx) => (
+                          <div key={idx} className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs">
+                            <div className="flex justify-between font-bold" style={{ color: colors.textPrimary }}>
+                              <span>{finding.test_name}</span>
+                              <span className="px-2 py-0.5 rounded-full bg-red-500 text-white font-bold text-[10px]">
+                                {finding.flag || 'HIGH'}
+                              </span>
+                            </div>
+                            <div className="text-red-400 font-mono font-bold mt-1">
+                              {finding.observed_value} {finding.unit}
+                              <span className="text-[11px] font-normal ml-2" style={{ color: colors.textSecondary }}>
+                                [Ref: {finding.reference_range}]
+                              </span>
+                            </div>
+                            {finding.clinical_implication && (
+                              <div className="text-[11px] mt-1" style={{ color: colors.textSecondary }}>
+                                {finding.clinical_implication}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Module B Feature: Potential Drug-Drug Interaction Alert */}
+                  {medicalTimeline.timeline.detected_drug_interactions && medicalTimeline.timeline.detected_drug_interactions.length > 0 && (
+                    <div className="mb-4 p-4 rounded-xl border border-amber-500/40 bg-amber-500/10">
+                      <div className="flex items-center gap-2 mb-2 text-amber-400 font-bold text-sm">
+                        <CiPill size={18} className="stroke-[1.5]" />
+                        <span>⚠️ Potential Drug-Drug Interaction Flagged</span>
+                      </div>
+                      <div className="space-y-1.5">
+                        {medicalTimeline.timeline.detected_drug_interactions.map((interaction, idx) => (
+                          <div key={idx} className="text-xs" style={{ color: colors.textPrimary }}>
+                            <span className="font-bold underline text-amber-300">
+                              {interaction.drugs?.join(' + ')}
+                            </span>
+                            : {interaction.description}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Module B Feature: Past Procedures & Surgical History */}
+                  {medicalTimeline.timeline.procedure_surgery_history && medicalTimeline.timeline.procedure_surgery_history.length > 0 && (
+                    <div className="mb-4 p-4 rounded-xl border" style={{ borderColor: colors.border, backgroundColor: colors.surfaceSecondary }}>
+                      <h4 className="text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: colors.textSecondary }}>
+                        <span>🏥 Past Procedures & Surgical History</span>
+                      </h4>
+                      <div className="space-y-2">
+                        {medicalTimeline.timeline.procedure_surgery_history.map((proc, idx) => (
+                          <div key={idx} className="flex justify-between items-start text-xs">
+                            <div>
+                              <span className="font-bold" style={{ color: colors.textPrimary }}>
+                                {proc.procedure_name}
+                              </span>
+                              {proc.hospital && <span className="ml-2 text-slate-400">({proc.hospital})</span>}
+                              {proc.notes && <div className="text-[11px] text-slate-400">{proc.notes}</div>}
+                            </div>
+                            <span className="px-2 py-0.5 rounded-md font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 shrink-0">
+                              {proc.date_or_year}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Compact Timeline Line */}
                   <div 
                     className="absolute left-3 top-0 bottom-0 w-px"
@@ -391,7 +474,7 @@ const PatientHistory = ({ selectedPatient }) => {
                                         color: colors.primary
                                       }}
                                     >
-                                      {event.event_type}
+                                      {event.document_type_label || event.event_type}
                                     </span>
                                     {isRecent && (
                                       <div 
@@ -411,6 +494,11 @@ const PatientHistory = ({ selectedPatient }) => {
                                         year: 'numeric'
                                       })}
                                     </div>
+                                    {event.doctor && (
+                                      <div className="text-[11px]" style={{ color: colors.textSecondary }}>
+                                        {event.doctor}
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                                 
@@ -421,6 +509,21 @@ const PatientHistory = ({ selectedPatient }) => {
                                 >
                                   {event.description}
                                 </p>
+
+                                {/* Diagnoses Tags */}
+                                {event.diagnoses && event.diagnoses.length > 0 && (
+                                  <div className="flex flex-wrap gap-1.5 mb-3">
+                                    {event.diagnoses.map((diag, dIdx) => (
+                                      <span
+                                        key={dIdx}
+                                        className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
+                                        style={{ backgroundColor: colors.success + '15', color: colors.success }}
+                                      >
+                                        📋 {diag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
                                 
                                 {/* Compact Medications */}
                                 {event.medications && event.medications.length > 0 && (
@@ -467,9 +570,74 @@ const PatientHistory = ({ selectedPatient }) => {
                                               {med.duration}
                                             </div>
                                           )}
+                                          {med.instructions && (
+                                            <div className="text-[11px] mt-1" style={{ color: colors.textSecondary }}>
+                                              {med.instructions}
+                                            </div>
+                                          )}
                                         </div>
                                       ))}
                                     </div>
+                                  </div>
+                                )}
+
+                                {/* Investigation Results with Values and Reference Ranges */}
+                                {event.investigation_results && event.investigation_results.length > 0 && (
+                                  <div className="mb-3">
+                                    <h5 
+                                      className="text-xs font-medium mb-2 flex items-center gap-1" 
+                                      style={{ color: colors.textSecondary }}
+                                    >
+                                      <FiActivity size={14} />
+                                      Investigation Results ({event.investigation_results.length})
+                                    </h5>
+                                    <div className="space-y-1.5">
+                                      {event.investigation_results.map((inv, invIdx) => (
+                                        <div
+                                          key={invIdx}
+                                          className={`p-2.5 rounded-lg border flex items-center justify-between text-xs ${
+                                            inv.is_abnormal ? 'bg-red-500/5 border-red-500/30' : ''
+                                          }`}
+                                          style={!inv.is_abnormal ? { backgroundColor: colors.surfaceSecondary, borderColor: colors.border } : {}}
+                                        >
+                                          <div>
+                                            <span className="font-bold" style={{ color: colors.textPrimary }}>
+                                              {inv.test_name}
+                                            </span>
+                                            <span className="text-[11px] ml-2" style={{ color: colors.textSecondary }}>
+                                              [Ref: {inv.reference_range}]
+                                            </span>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <span 
+                                              className={`font-mono font-bold ${inv.is_abnormal ? 'text-red-400' : ''}`} 
+                                              style={!inv.is_abnormal ? { color: colors.textPrimary } : {}}
+                                            >
+                                              {inv.observed_value} {inv.unit}
+                                            </span>
+                                            {inv.is_abnormal ? (
+                                              <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white font-bold text-[9px]">
+                                                {inv.flag || 'HIGH'}
+                                              </span>
+                                            ) : (
+                                              <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-[9px]">
+                                                NORMAL
+                                              </span>
+                                            )}
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Procedure / Surgery History */}
+                                {event.procedures_surgeries && event.procedures_surgeries.length > 0 && (
+                                  <div className="mb-3 text-xs">
+                                    <span className="font-bold text-blue-400">Procedures/Surgeries: </span>
+                                    <span style={{ color: colors.textSecondary }}>
+                                      {event.procedures_surgeries.map(p => typeof p === 'string' ? p : p.procedure_name).join(', ')}
+                                    </span>
                                   </div>
                                 )}
                                 

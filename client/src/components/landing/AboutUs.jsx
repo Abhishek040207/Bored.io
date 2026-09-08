@@ -33,7 +33,7 @@ const AboutUs = () => {
             className="font-ptserif text-2xl md:text-3xl lg:text-4xl font-normal leading-tight" 
             style={{color: colors.secondary}}
           >
-            At Swasya AI, we make healthcare documentation{' '}
+            At Sahayak, we make healthcare documentation{' '}
             <span style={{color: colors.primary}}>accessible, personalized, and efficient.</span>{' '}
             Whether through AI-powered transcription, intelligent data extraction, or seamless workflow integration, 
             we're here to support healthcare teams—anytime, anywhere.

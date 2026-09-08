@@ -252,7 +252,7 @@ const Dashboard = () => {
             className="text-lg sm:text-xl font-ptserif font-medium"
             style={{ color: colors.textSecondary }}
           >
-            Swasya AI
+            Sahayak
           </h1>
           
           {/* Desktop Dashboard Label & Navigation */}
@@ -279,7 +279,7 @@ const Dashboard = () => {
                 color: colors.surface
               }}
             >
-              Swasya Map
+              Sahayak Map
             </button>
           </div>
 
@@ -315,7 +315,7 @@ const Dashboard = () => {
                     color: colors.surface
                   }}
                 >
-                  Swasya Map
+                  Sahayak Map
                 </button>
               </div>
             </div>

@@ -97,7 +97,23 @@ class RedFlagService:
         """
         text_lower = text.lower() if text else ""
         socrates_data = socrates_data or {}
-        
+
+        # Standard headaches, migraines, or body pain are NOT life-threatening emergencies
+        is_routine_headache = any(h in text_lower for h in ["headache", "head ache", "sir dard", "sar dard", "migraine", "tension headache"])
+        has_focal_stroke = any(s in text_lower for s in ["paralysis", "lakwa", "slurred speech", "face droop", "munh tedha", "one side weak"])
+        if is_routine_headache and not has_focal_stroke:
+            return {
+                "is_emergency": False,
+                "severity": "ROUTINE",
+                "category": "HEADACHE_EVALUATION",
+                "condition": "Headache / Cephalea (Non-Emergency)",
+                "matched_terms": [],
+                "secondary_factors": [],
+                "recommended_action": "Standard clinical consultation for headache diagnosis and symptomatic management",
+                "alert_message": None,
+                "triage_priority": "PRIORITY_3_NORMAL"
+            }
+
         # Check pain severity from SOCRATES
         pain_severity = socrates_data.get("severity", 0)
         try:

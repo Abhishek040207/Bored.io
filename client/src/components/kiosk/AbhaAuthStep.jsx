@@ -182,24 +182,24 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
     <div className="max-w-4xl mx-auto py-6 px-4">
       {/* Step Header */}
       <div className="text-center space-y-3 mb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider">
-          <FiShield className="text-blue-400" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-xs font-semibold uppercase tracking-wider">
+          <FiShield className="text-sky-700" />
           Step 2 • पहचान एवं आभा प्रमाणीकरण / Patient Identity & ABHA
         </div>
         <div className="flex items-center justify-center gap-3">
-          <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight">
             {isHindi ? 'आभा / मरीज पहचान' : 'ABHA Health Identity'}
           </h1>
           <button
             type="button"
             onClick={speakPrompt}
-            className="p-2.5 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 transition-colors border border-slate-700 active:scale-95"
+            className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-50 text-sky-700 transition-colors border border-slate-200 active:scale-95"
             title="Read instructions aloud"
           >
             <FiVolume2 size={22} />
           </button>
         </div>
-        <p className="text-base md:text-lg text-slate-400 max-w-xl mx-auto font-light">
+        <p className="text-base md:text-lg text-slate-600 max-w-xl mx-auto font-normal">
           {isHindi
             ? 'आयुष्मान भारत डिजिटल मिशन (ABDM) के अंतर्गत अपने स्वास्थ्य खाते से जुड़ें'
             : 'Connect your Ayushman Bharat Digital Mission (ABDM) account or quick register'}
@@ -208,52 +208,52 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
 
       {/* Verified Profile Card Preview */}
       {verifiedPatient ? (
-        <div className="max-w-xl mx-auto bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 border-2 border-emerald-500 rounded-3xl p-7 shadow-2xl shadow-emerald-500/20 mb-8 transform animate-fadeIn">
+        <div className="max-w-xl mx-auto bg-white border-2 border-sky-600 rounded-3xl p-7 shadow-lg mb-8 transform animate-fadeIn">
           {/* Official Ayushman Bharat Card Style Header */}
-          <div className="flex items-center justify-between border-b border-slate-700/80 pb-4 mb-5">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 font-bold text-lg">
+              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 font-bold text-lg">
                 🇮🇳
               </div>
               <div>
-                <div className="text-xs font-bold tracking-widest uppercase text-orange-400">
+                <div className="text-xs font-bold tracking-widest uppercase text-orange-600">
                   NATIONAL HEALTH AUTHORITY
                 </div>
-                <div className="text-sm font-semibold text-white">
+                <div className="text-sm font-bold text-slate-900">
                   Ayushman Bharat Health Account (ABHA)
                 </div>
               </div>
             </div>
-            <span className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 text-xs font-bold flex items-center gap-1.5">
+            <span className="px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold flex items-center gap-1.5">
               <FiCheckCircle size={14} />
               VERIFIED
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-3xl font-bold border-2 border-white/20 shadow-lg">
+            <div className="w-24 h-24 rounded-2xl bg-sky-600 flex items-center justify-center text-white text-3xl font-bold border-2 border-white shadow-md">
               {verifiedPatient.name.charAt(0)}
             </div>
 
             <div className="flex-1 text-center sm:text-left space-y-1">
-              <h2 className="text-2xl font-bold text-white">{verifiedPatient.name}</h2>
-              <div className="text-sm text-slate-300">
+              <h2 className="text-2xl font-bold text-slate-900">{verifiedPatient.name}</h2>
+              <div className="text-sm text-slate-600">
                 {verifiedPatient.age} Yrs • {verifiedPatient.gender?.toUpperCase()}
               </div>
-              <div className="inline-block font-mono text-sm px-3 py-1 rounded-lg bg-slate-800 text-emerald-300 font-bold border border-slate-700 tracking-wider">
+              <div className="inline-block font-mono text-sm px-3 py-1 rounded-lg bg-sky-50 text-sky-900 font-bold border border-sky-200 tracking-wider">
                 {verifiedPatient.abha_number || '91-5043-5666-3218'}
               </div>
-              <div className="text-xs text-slate-400 mt-1">
-                ABHA Address: <span className="text-blue-400">{verifiedPatient.abha_address || 'patient@abdm'}</span>
+              <div className="text-xs text-slate-500 mt-1">
+                ABHA Address: <span className="text-sky-700 font-semibold">{verifiedPatient.abha_address || 'patient@abdm'}</span>
               </div>
             </div>
           </div>
 
-          <div className="mt-7 pt-5 border-t border-slate-800 flex items-center justify-between">
+          <div className="mt-7 pt-5 border-t border-slate-200 flex items-center justify-between">
             <button
               type="button"
               onClick={() => setVerifiedPatient(null)}
-              className="text-xs text-slate-400 hover:text-white underline"
+              className="text-xs text-slate-500 hover:text-slate-900 underline"
             >
               {isHindi ? 'अलग मरीज चुनें' : 'Change Patient'}
             </button>
@@ -261,7 +261,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
             <button
               type="button"
               onClick={() => onAuthenticated(verifiedPatient)}
-              className="py-3 px-8 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-base shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+              className="py-3 px-8 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-base shadow-md shadow-sky-600/20 transition-all flex items-center gap-2 active:scale-98"
             >
               <span>{isHindi ? 'सहमति पर जाएं' : 'Proceed to Consent'}</span>
               <FiArrowRight />
@@ -269,16 +269,16 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
           </div>
         </div>
       ) : (
-        <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-md">
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
           {/* Mode Tabs */}
-          <div className="flex rounded-2xl bg-slate-950 p-1.5 border border-slate-800 mb-8 max-w-xl mx-auto">
+          <div className="flex rounded-2xl bg-slate-100 p-1.5 border border-slate-200 mb-8 max-w-xl mx-auto">
             <button
               type="button"
               onClick={() => setActiveTab('abha')}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
                 activeTab === 'abha'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <FiKey size={16} />
@@ -288,10 +288,10 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
             <button
               type="button"
               onClick={() => setActiveTab('scan')}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
                 activeTab === 'scan'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <MdQrCodeScanner size={16} />
@@ -301,10 +301,10 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
             <button
               type="button"
               onClick={() => setActiveTab('new')}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
                 activeTab === 'new'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <FiUserPlus size={16} />
@@ -316,7 +316,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
           {activeTab === 'abha' && (
             <div className="max-w-xl mx-auto space-y-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-bold text-slate-700 mb-2">
                   {isHindi ? '14-अंकों का आभा नंबर या आभा पता' : '14-Digit ABHA Number or ABHA Address'}
                 </label>
                 <div className="relative">
@@ -325,15 +325,15 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                     value={abhaInput}
                     onChange={(e) => setAbhaInput(e.target.value)}
                     placeholder="e.g. 91-5043-5666-3218 or name@abdm"
-                    className="w-full py-4 pl-12 pr-4 bg-slate-950 border-2 border-slate-700 rounded-2xl text-white text-lg font-mono focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20"
+                    className="w-full py-4 pl-12 pr-4 bg-slate-50 border-2 border-slate-300 rounded-2xl text-slate-900 text-lg font-mono focus:border-sky-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-sky-100"
                   />
-                  <FiKey className="absolute left-4 top-5 text-slate-500 text-xl" />
+                  <FiKey className="absolute left-4 top-5 text-slate-400 text-xl" />
                 </div>
               </div>
 
               {/* Quick Demo Profiles */}
               <div>
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   {isHindi ? 'त्वरित डेमो परीक्षण (क्लिक करें):' : 'Demo Test Accounts (Click to test):'}
                 </span>
                 <div className="flex flex-wrap gap-2 mt-2">
@@ -342,7 +342,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                       key={p.abha}
                       type="button"
                       onClick={() => setAbhaInput(p.abha)}
-                      className="text-xs py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-blue-300 border border-slate-700 transition-colors"
+                      className="text-xs py-1.5 px-3 rounded-lg bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-sky-800 border border-slate-200 transition-colors font-medium"
                     >
                       {p.label}
                     </button>
@@ -351,7 +351,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
               </div>
 
               {error && (
-                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
                   <FiAlertCircle size={18} />
                   <span>{error}</span>
                 </div>
@@ -361,7 +361,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                 type="button"
                 onClick={handleVerifyAbha}
                 disabled={loading}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-lg shadow-xl shadow-blue-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-lg shadow-md shadow-sky-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 active:scale-98"
               >
                 {loading ? (
                   <>
@@ -381,15 +381,15 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
           {/* Tab 2: Scan QR */}
           {activeTab === 'scan' && (
             <div className="max-w-md mx-auto text-center space-y-6 py-4">
-              <div className="w-48 h-48 mx-auto rounded-3xl border-4 border-dashed border-blue-500/40 bg-slate-950 flex flex-col items-center justify-center relative overflow-hidden group">
-                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent animate-pulse top-1/2" />
-                <MdQrCodeScanner size={72} className="text-blue-400 mb-2" />
-                <span className="text-xs text-slate-400">
+              <div className="w-48 h-48 mx-auto rounded-3xl border-4 border-dashed border-sky-300 bg-sky-50/50 flex flex-col items-center justify-center relative overflow-hidden group">
+                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-sky-500 to-transparent animate-pulse top-1/2" />
+                <MdQrCodeScanner size={72} className="text-sky-600 mb-2" />
+                <span className="text-xs font-semibold text-slate-600">
                   {isHindi ? 'आभा कार्ड स्कैनर' : 'Align ABHA QR Code'}
                 </span>
               </div>
 
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-slate-600">
                 {isHindi
                   ? 'अपना आभा कार्ड या आयुष्मान भारत पर्ची स्कैनर के सामने रखें'
                   : 'Hold your physical ABHA card or printed QR in front of the camera'}
@@ -399,7 +399,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                 type="button"
                 onClick={handleSimulateQRScan}
                 disabled={loading}
-                className="py-3 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shadow-lg"
+                className="py-3 px-6 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm transition-all shadow-md active:scale-98"
               >
                 {loading ? 'Simulating Scanner...' : 'Simulate Scan ABHA Card'}
               </button>
@@ -411,7 +411,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
             <form onSubmit={handleRegisterNew} className="max-w-xl mx-auto space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
                     {isHindi ? 'मरीज का पूरा नाम *' : 'Full Name *'}
                   </label>
                   <input
@@ -420,12 +420,12 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     placeholder="e.g. Ramesh Patel"
-                    className="w-full py-3 px-4 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full py-3 px-4 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:border-sky-600 focus:bg-white focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
                     {isHindi ? '10-अंकों का मोबाइल नंबर *' : '10-Digit Mobile Number *'}
                   </label>
                   <input
@@ -435,14 +435,14 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                     value={newPhone}
                     onChange={(e) => setNewPhone(e.target.value)}
                     placeholder="9876543210"
-                    className="w-full py-3 px-4 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full py-3 px-4 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:border-sky-600 focus:bg-white focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
                     {isHindi ? 'उम्र (वर्ष)' : 'Age (Years)'}
                   </label>
                   <input
@@ -450,18 +450,18 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                     value={newAge}
                     onChange={(e) => setNewAge(e.target.value)}
                     placeholder="35"
-                    className="w-full py-3 px-4 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full py-3 px-4 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:border-sky-600 focus:bg-white focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
                     {isHindi ? 'लिंग' : 'Gender'}
                   </label>
                   <select
                     value={newGender}
                     onChange={(e) => setNewGender(e.target.value)}
-                    className="w-full py-3 px-4 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:outline-none"
+                    className="w-full py-3 px-4 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:border-sky-600 focus:bg-white focus:outline-none"
                   >
                     <option value="male">{isHindi ? 'पुरुष (Male)' : 'Male'}</option>
                     <option value="female">{isHindi ? 'महिला (Female)' : 'Female'}</option>
@@ -471,7 +471,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
               </div>
 
               {error && (
-                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs">
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs">
                   {error}
                 </div>
               )}
@@ -479,7 +479,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-base shadow-xl shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 mt-2"
+                className="w-full py-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-base shadow-md shadow-sky-600/20 transition-all flex items-center justify-center gap-2 mt-2 active:scale-98"
               >
                 {loading ? (
                   <>
@@ -497,11 +497,11 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
           )}
 
           {/* Bottom Nav Back */}
-          <div className="mt-8 pt-4 border-t border-slate-800 text-center">
+          <div className="mt-8 pt-4 border-t border-slate-200 text-center">
             <button
               type="button"
               onClick={onBack}
-              className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+              className="text-xs text-slate-500 hover:text-slate-800 transition-colors"
             >
               ← {isHindi ? 'भाषा चयन पर वापस जाएं' : 'Back to Language Selection'}
             </button>
@@ -511,16 +511,16 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
 
       {/* OTP Verification Modal */}
       {otpModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border-2 border-blue-500 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl animate-scaleIn">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border-2 border-sky-600 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl animate-scaleIn">
             <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 mx-auto flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-sky-50 text-sky-700 border border-sky-200 mx-auto flex items-center justify-center">
                 <FiSmartphone size={24} />
               </div>
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-slate-900">
                 {isHindi ? 'ओटीपी सत्यापन' : 'Verify One-Time Password'}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600">
                 {otpMessage || (isHindi ? 'आपके पंजीकृत मोबाइल पर 6 अंकों का ओटीपी भेजा गया है' : 'Enter 6-digit OTP sent to registered mobile')}
               </p>
             </div>
@@ -532,13 +532,13 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                 value={otpValue}
                 onChange={(e) => setOtpValue(e.target.value)}
                 placeholder="• • • • • •"
-                className="w-full py-3 px-4 text-center tracking-[1em] font-mono text-2xl font-bold bg-slate-950 border-2 border-blue-500 rounded-2xl text-white focus:outline-none"
+                className="w-full py-3 px-4 text-center tracking-[1em] font-mono text-2xl font-bold bg-slate-50 border-2 border-sky-600 rounded-2xl text-slate-900 focus:outline-none"
               />
               <div className="text-center mt-2">
                 <button
                   type="button"
                   onClick={() => setOtpValue('123456')}
-                  className="text-xs text-blue-400 hover:underline"
+                  className="text-xs font-semibold text-sky-700 hover:underline"
                 >
                   {isHindi ? 'डेमो ओटीपी भरें (123456)' : 'Auto-fill Demo OTP (123456)'}
                 </button>
@@ -546,7 +546,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
             </div>
 
             {error && (
-              <div className="text-xs text-red-400 text-center bg-red-500/10 p-2 rounded-lg">
+              <div className="text-xs text-red-700 text-center bg-red-50 p-2 rounded-lg border border-red-200">
                 {error}
               </div>
             )}
@@ -555,7 +555,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
               <button
                 type="button"
                 onClick={() => setOtpModalOpen(false)}
-                className="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-sm"
+                className="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm border border-slate-200"
               >
                 {isHindi ? 'रद्द करें' : 'Cancel'}
               </button>
@@ -563,7 +563,7 @@ const AbhaAuthStep = ({ language, onAuthenticated, onBack }) => {
                 type="button"
                 onClick={handleConfirmOtp}
                 disabled={loading}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-sm shadow-lg disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md disabled:opacity-50 active:scale-98"
               >
                 {loading ? 'Verifying...' : (isHindi ? 'पुष्टि करें' : 'Confirm & Login')}
               </button>

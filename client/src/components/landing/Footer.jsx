@@ -16,7 +16,7 @@ const Footer = () => {
               className="text-xl font-medium" 
               style={{color: colors.textPrimary}}
             >
-              Swasya AI
+              Sahayak
             </h3>
             <p 
               className="text-base font-light mt-1" 

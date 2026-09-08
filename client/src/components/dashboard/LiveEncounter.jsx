@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { colors } from '../../utils/colors';
-import { FiMic, FiFileText, FiCheck, FiLoader, FiVolume2, FiWifi, FiClock, FiPlay, FiCheckCircle, FiChevronRight, FiChevronDown } from 'react-icons/fi';
-import { queueAPI, notesAPI, transformers } from '../../utils/api';
+import { FiMic, FiFileText, FiCheck, FiLoader, FiVolume2, FiWifi, FiClock, FiPlay, FiCheckCircle, FiChevronRight, FiChevronDown, FiGlobe } from 'react-icons/fi';
+import { queueAPI, notesAPI, transformers, kioskAPI } from '../../utils/api';
 import StructuredClinicalSummaryView from './StructuredClinicalSummaryView';
+import TranslationPanel from '../kiosk/TranslationPanel';
 
 // Custom Markdown Component for SOAP Notes
 const SOAPMarkdown = ({ content, className, style }) => {
@@ -83,6 +84,97 @@ const SOAPMarkdown = ({ content, className, style }) => {
       <ReactMarkdown components={markdownComponents}>
         {content || 'No data recorded'}
       </ReactMarkdown>
+    </div>
+  );
+};
+
+// Bhashini Translate Button for SOAP Notes
+const TranslateSOAPButton = ({ soapNote, chiefComplaint }) => {
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translatedContent, setTranslatedContent] = useState(null);
+  const [showTranslation, setShowTranslation] = useState(false);
+
+  const handleTranslate = async () => {
+    if (translatedContent) {
+      setShowTranslation(!showTranslation);
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      // Combine SOAP note content for translation
+      const parts = [];
+      if (chiefComplaint) parts.push(`Chief Complaint: ${chiefComplaint}`);
+      if (soapNote.subjective) parts.push(`Subjective: ${soapNote.subjective}`);
+      if (soapNote.objective) parts.push(`Objective: ${soapNote.objective}`);
+      if (soapNote.assessment) parts.push(`Assessment: ${soapNote.assessment}`);
+      if (soapNote.plan) parts.push(`Plan: ${soapNote.plan}`);
+
+      const textToTranslate = parts.join('\n\n');
+      if (!textToTranslate.trim()) return;
+
+      const result = await kioskAPI.translateText(textToTranslate, 'hi', 'en');
+      if (result.success && result.translated_text) {
+        setTranslatedContent({
+          text: result.translated_text,
+          engine: result.engine || 'Bhashini NLTM'
+        });
+        setShowTranslation(true);
+      }
+    } catch (err) {
+      console.warn('Translation failed:', err);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={handleTranslate}
+        disabled={isTranslating}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+        style={{
+          backgroundColor: showTranslation ? colors.primary + '15' : colors.surfaceSecondary,
+          color: showTranslation ? colors.primary : colors.textSecondary,
+          border: `1px solid ${showTranslation ? colors.primary + '40' : colors.border}`
+        }}
+      >
+        {isTranslating ? (
+          <>
+            <FiLoader size={12} className="animate-spin" />
+            Translating...
+          </>
+        ) : (
+          <>
+            <FiGlobe size={12} />
+            {showTranslation ? 'Hide Translation' : 'Translate to English'}
+          </>
+        )}
+      </button>
+
+      {showTranslation && translatedContent && (
+        <div
+          className="mt-3 p-4 rounded-xl border text-xs leading-relaxed whitespace-pre-line"
+          style={{
+            backgroundColor: '#f0fdf4',
+            borderColor: '#bbf7d0',
+            color: colors.textPrimary
+          }}
+        >
+          <div className="flex items-center gap-1.5 mb-2">
+            <FiGlobe size={12} style={{ color: colors.primary }} />
+            <span className="font-semibold" style={{ color: colors.primary }}>
+              English Translation
+            </span>
+            <span className="ml-auto text-[10px]" style={{ color: colors.textTertiary }}>
+              {translatedContent.engine}
+            </span>
+          </div>
+          {translatedContent.text}
+        </div>
+      )}
     </div>
   );
 };
@@ -357,7 +449,15 @@ const PreviousSOAPNotes = ({ timelineData, colors }) => {
                       )}
                     </div>
 
-                    {/* Medications if available */}
+                     {/* Bhashini Translate Button */}
+                     <div className="mt-3 flex justify-end">
+                       <TranslateSOAPButton
+                         soapNote={soapNote}
+                         chiefComplaint={chiefComplaint}
+                       />
+                     </div>
+
+                     {/* Medications if available */}
                     {soapNote.medications && soapNote.medications.length > 0 && (
                       <div className="mt-4">
                         <div className="flex items-center gap-2 mb-3">
@@ -750,7 +850,7 @@ const LiveEncounter = ({ encounterData, selectedPatient, timelineData, onConsult
     return () => {
       stopPolling();
     };
-  }, [selectedPatient?.id, fetchLatestData, startPolling, stopPolling]);
+  }, [selectedPatient?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Remove the old effect that synced with parent encounterData to avoid conflicts
   // The fetchLatestData function handles all data fetching and comparison
