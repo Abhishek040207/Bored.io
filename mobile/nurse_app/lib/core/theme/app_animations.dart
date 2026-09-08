@@ -1,4 +1,4 @@
-/// Swasya AI Animation Configuration
+﻿/// Sahayak Animation Configuration
 /// 
 /// Consistent animation timings and curves for the entire application.
 

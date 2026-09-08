@@ -1,6 +1,6 @@
-# API Endpoints Documentation
+﻿# API Endpoints Documentation
 
-## 🚀 Deployed Backend - PHC AI Co-Pilot
+## ðŸš€ Deployed Backend - Sahayak
 
 **Base URL:** `https://f6c3azplla.execute-api.eu-north-1.amazonaws.com/Prod`
 
@@ -10,7 +10,7 @@
 
 ---
 
-## 📋 Available Endpoints
+## ðŸ“‹ Available Endpoints
 
 ### 1. Patient Registration API
 
@@ -35,10 +35,10 @@ curl -X POST https://f6c3azplla.execute-api.eu-north-1.amazonaws.com/Prod/patien
 **Request Body:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| name | string | ✅ Yes | Patient full name |
-| phone | string | ✅ Yes | Phone number (10 digits) |
-| age | integer | ❌ No | Patient age |
-| gender | string | ❌ No | M/F/Other |
+| name | string | âœ… Yes | Patient full name |
+| phone | string | âœ… Yes | Phone number (10 digits) |
+| age | integer | âŒ No | Patient age |
+| gender | string | âŒ No | M/F/Other |
 
 **Success Response (200):**
 ```json
@@ -88,10 +88,10 @@ final patientId = data['patient_id']; // Save this!
 **Purpose:** Get a secure S3 presigned URL to upload audio/image files directly from mobile app
 
 **Why use presigned URLs?**
-- ✅ Mobile app doesn't need AWS credentials
-- ✅ Upload directly to S3 (faster, no backend bottleneck)
-- ✅ URL expires in 5 minutes (secure)
-- ✅ Automatically triggers Lambda processing
+- âœ… Mobile app doesn't need AWS credentials
+- âœ… Upload directly to S3 (faster, no backend bottleneck)
+- âœ… URL expires in 5 minutes (secure)
+- âœ… Automatically triggers Lambda processing
 
 **Request:**
 ```bash
@@ -107,9 +107,9 @@ curl -X POST https://f6c3azplla.execute-api.eu-north-1.amazonaws.com/Prod/upload
 **Request Body:**
 | Field | Type | Required | Values | Description |
 |-------|------|----------|--------|-------------|
-| patient_id | string | ✅ Yes | PAT_XXXXX | Patient ID from registration |
-| file_type | string | ✅ Yes | "audio" or "image" | Type of file to upload |
-| file_extension | string | ✅ Yes | mp3, wav, m4a, jpg, png, pdf | File extension |
+| patient_id | string | âœ… Yes | PAT_XXXXX | Patient ID from registration |
+| file_type | string | âœ… Yes | "audio" or "image" | Type of file to upload |
+| file_extension | string | âœ… Yes | mp3, wav, m4a, jpg, png, pdf | File extension |
 
 **Success Response (200):**
 ```json
@@ -161,15 +161,15 @@ await http.put(
 **Process Flow:**
 ```
 Mobile App uploads audio.mp3
-    ↓
+    â†“
 S3 Bucket receives file
-    ↓
+    â†“
 Lambda Function (ScribeTask) triggered automatically
-    ↓
-AWS Transcribe converts audio → text
-    ↓
-Gemini AI structures text → SOAP note
-    ↓
+    â†“
+AWS Transcribe converts audio â†’ text
+    â†“
+Gemini AI structures text â†’ SOAP note
+    â†“
 Saves to DynamoDB (PatientNotes table)
 ```
 
@@ -194,7 +194,7 @@ aws dynamodb query \
   "timestamp": 1699401600,
   "soap_note": {
     "subjective": "Patient complains of fever and headache for 2 days",
-    "objective": "Temperature 101°F, appears fatigued",
+    "objective": "Temperature 101Â°F, appears fatigued",
     "assessment": "Likely viral fever",
     "plan": "Rest, fluids, Paracetamol 500mg TID for 3 days"
   },
@@ -216,15 +216,15 @@ aws dynamodb query \
 **Process Flow:**
 ```
 Mobile App uploads prescription.jpg
-    ↓
+    â†“
 S3 Bucket receives file
-    ↓
+    â†“
 Lambda Function (DigitizeTask) triggered automatically
-    ↓
+    â†“
 AWS Textract extracts text from image (OCR)
-    ↓
-Gemini AI structures data → Medications list
-    ↓
+    â†“
+Gemini AI structures data â†’ Medications list
+    â†“
 Saves to DynamoDB (PatientHistory table)
 ```
 
@@ -272,7 +272,7 @@ aws dynamodb query \
 
 ---
 
-## 🗄️ DynamoDB Tables
+## ðŸ—„ï¸ DynamoDB Tables
 
 ### Patients Table
 **Table Name:** `Patients`
@@ -319,7 +319,7 @@ aws dynamodb query \
 
 ---
 
-## 📦 S3 Buckets
+## ðŸ“¦ S3 Buckets
 
 ### Audio Uploads Bucket
 **Bucket Name:** `phc-audio-uploads-1762597760`
@@ -343,7 +343,7 @@ aws s3 ls s3://phc-image-uploads-1762597760/ --recursive --region eu-north-1
 
 ---
 
-## 🧪 Testing Guide
+## ðŸ§ª Testing Guide
 
 ### Test 1: Register Patient
 ```bash
@@ -383,7 +383,7 @@ curl -X PUT "$UPLOAD_URL" \
   --upload-file /tmp/test.mp3 \
   -H "Content-Type: audio/mp3"
 
-echo "✅ File uploaded! Wait 30 seconds for processing..."
+echo "âœ… File uploaded! Wait 30 seconds for processing..."
 ```
 
 ### Test 4: Check SOAP Note in DynamoDB
@@ -400,7 +400,7 @@ aws dynamodb query \
 
 ---
 
-## 🐛 Debugging
+## ðŸ› Debugging
 
 ### Check Lambda Logs
 ```bash
@@ -439,7 +439,7 @@ aws dynamodb scan --table-name PatientHistory --region eu-north-1 | jq '.Items'
 
 ---
 
-## 🔥 Common Issues
+## ðŸ”¥ Common Issues
 
 ### Issue 1: "Presigned URL expired"
 **Cause:** URLs expire in 5 minutes
@@ -459,7 +459,7 @@ aws dynamodb scan --table-name PatientHistory --region eu-north-1 | jq '.Items'
 
 ---
 
-## 📱 Mobile App Integration Checklist
+## ðŸ“± Mobile App Integration Checklist
 
 - [ ] Save base URL in config: `https://f6c3azplla.execute-api.eu-north-1.amazonaws.com/Prod`
 - [ ] Implement patient registration screen
@@ -472,12 +472,12 @@ aws dynamodb scan --table-name PatientHistory --region eu-north-1 | jq '.Items'
 
 ---
 
-## 🎯 Next Steps
+## ðŸŽ¯ Next Steps
 
 1. **Test with Mobile App:**
    - Integrate these endpoints
-   - Test audio recording → upload
-   - Test camera capture → upload
+   - Test audio recording â†’ upload
+   - Test camera capture â†’ upload
 
 2. **Add Missing Endpoints:**
    - [ ] GET `/patients` - List all patients
@@ -497,7 +497,7 @@ aws dynamodb scan --table-name PatientHistory --region eu-north-1 | jq '.Items'
 
 ---
 
-## 📊 Cost Tracking
+## ðŸ“Š Cost Tracking
 
 Check current costs:
 ```bash
@@ -513,5 +513,5 @@ Expected hackathon costs: **~$2-5** (Lambda + DynamoDB + S3 + Transcribe + Textr
 ---
 
 **Last Updated:** 2025-11-08
-**Deployment Status:** ✅ LIVE
+**Deployment Status:** âœ… LIVE
 **Region:** eu-north-1 (Stockholm)

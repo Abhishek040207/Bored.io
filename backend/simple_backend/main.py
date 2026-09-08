@@ -1,6 +1,6 @@
 
 """
-PHC AI Co-Pilot Backend - Refactored with Modular Routes
+Sahayak Backend - Modular FastAPI
 Version: 3.0.0
 Features: Queue Management, Groq Whisper, Gemini Vision, Organized Architecture
 """
@@ -35,9 +35,9 @@ if missing_keys:
 
 # Initialize FastAPI
 app = FastAPI(
-    title="PHC AI Co-Pilot Backend",
+    title="Sahayak Backend",
     description="""
-    ## 🏥 Primary Healthcare Center AI Co-Pilot
+    ## 🏥 Sahayak — AI-Powered Primary Healthcare Assistant
     
     Complete backend system for Indian PHCs featuring:
     - **Patient Registration & Management**
@@ -54,13 +54,13 @@ app = FastAPI(
     - 💾 JSON-based storage (ready for DynamoDB migration)
     
     ### Target Users:
-    - **Nurses** (Rekha) - Mobile app for data input
-    - **Doctors** (Dr. Priya) - Web dashboard for patient history
+    - **Nurses** - Mobile app for data input
+    - **Doctors** - Web dashboard for patient history
     """,
     version="3.0.0",
     contact={
-        "name": "HackCBS Project",
-        "url": "https://github.com/chahatkesh/hackcbs"
+        "name": "Team Bored.io",
+        "url": "https://github.com/Abhishek040207/Bored.io"
     }
 )
 

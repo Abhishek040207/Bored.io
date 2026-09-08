@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+﻿import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { colors } from '../utils/colors'
 import PatientQueue from '../components/dashboard/PatientQueue'
@@ -126,8 +126,8 @@ const Dashboard = () => {
   }
 
   // Navigation handlers
-  const handleSwasyaMapClick = () => {
-    navigate('/swasya-map')
+  const handleSahayakMapClick = () => {
+    navigate('/sahayak-map')
   }
 
   // Mobile utility functions
@@ -272,7 +272,7 @@ const Dashboard = () => {
           {/* Desktop Navigation Buttons */}
           <div className="hidden lg:flex items-center gap-3 ml-6">
             <button
-              onClick={handleSwasyaMapClick}
+              onClick={handleSahayakMapClick}
               className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:opacity-80"
               style={{
                 backgroundColor: colors.primary,
@@ -308,7 +308,7 @@ const Dashboard = () => {
             >
               <div className="p-4 space-y-3">
                 <button
-                  onClick={handleSwasyaMapClick}
+                  onClick={handleSahayakMapClick}
                   className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
                   style={{
                     backgroundColor: colors.primary,

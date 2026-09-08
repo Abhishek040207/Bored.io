@@ -1,4 +1,4 @@
-/// Swasya AI Color System - Medical AI Theme
+﻿/// Sahayak Color System - Medical AI Theme
 /// 
 /// Color palette for the entire application.
 /// Change colors here to update throughout the app.
@@ -110,7 +110,7 @@ class AppColors {
   // GRADIENT DEFINITIONS
   // ============================================================================
   
-  /// CTA gradient: Primary → Accent → Primary
+  /// CTA gradient: Primary â†’ Accent â†’ Primary
   static const LinearGradient ctaGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

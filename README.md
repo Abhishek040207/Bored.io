@@ -1,38 +1,30 @@
-**AWS Track Winner – HackCBS 8.0 (Delhi)**
-
-This project was recognized as the **Winner of the AWS Track** at **HackCBS 8.0**, for its innovative use of AWS services and real-world impact in primary healthcare.
-
-
-
-# Swasya AI
+# Sahayak
 
 ## Turning dialogue into data and data into clarity.
 
-<img width="3000" height="1000" alt="Git Repo Cover" src="https://github.com/user-attachments/assets/0456c97b-cb47-467a-980a-b754aba31942" />
-
 <div align="center">
 
-!\[React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
-!\[React Native](https://img.shields.io/badge/React\_Native-20232A?style=for-the-badge\&logo=react\&logoColor=61DAFB)
-!\[Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge\&logo=flutter\&logoColor=white)
-!\[Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge\&logo=nodedotjs\&logoColor=white)
-!\[FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge\&logo=fastapi\&logoColor=white)
-!\[Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
-!\[AWS Lambda](https://img.shields.io/badge/AWS\_Lambda-FF9900?style=for-the-badge\&logo=awslambda\&logoColor=white)
-!\[MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge\&logo=mongodb\&logoColor=white)
-!\[DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge\&logo=amazondynamodb\&logoColor=white)
-!\[AWS S3](https://img.shields.io/badge/AWS\_S3-569A31?style=for-the-badge\&logo=amazons3\&logoColor=white)
-!\[TailwindCSS](https://img.shields.io/badge/Tailwind\_CSS-38B2AC?style=for-the-badge\&logo=tailwind-css\&logoColor=white)
-!\[Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge\&logo=vite\&logoColor=white)
-!\[Google Gemini](https://img.shields.io/badge/Google\_Gemini-4285F4?style=for-the-badge\&logo=google\&logoColor=white)
-!\[AWS Transcribe](https://img.shields.io/badge/AWS\_Transcribe-FF9900?style=for-the-badge\&logo=amazonaws\&logoColor=white)
-!\[AWS Textract](https://img.shields.io/badge/AWS\_Textract-FF9900?style=for-the-badge\&logo=amazonaws\&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white)
+![AWS S3](https://img.shields.io/badge/AWS_S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![AWS Transcribe](https://img.shields.io/badge/AWS_Transcribe-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![AWS Textract](https://img.shields.io/badge/AWS_Textract-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
 
 </div>
 
-\---
+---
 
-## **Project Title:** Swasya AI
+## **Project Title:** Sahayak
 
 ### *Reimagining Primary Healthcare with Intelligence and Speed*
 
@@ -46,18 +38,18 @@ Primary healthcare systems in India are **overburdened and inefficient**, result
 
 There is a strong need for a **seamless, AI-driven workflow** that collects patient information before consultation, helping doctors make faster, data-backed decisions.
 
-\---
+---
 
-## **Proposed Solution — Swasya AI**
+## **Proposed Solution — Sahayak**
 
-**Swasya AI** is an **AI-powered healthcare assistance system** designed for **primary health centers (PHCs)** to streamline communication and data flow between **nurses, doctors, and administrators**.
+**Sahayak** is an **AI-powered healthcare assistance system** designed for **primary health centers (PHCs)** to streamline communication and data flow between **nurses, doctors, and administrators**.
 It reduces diagnosis time, ensures accurate record-keeping, and empowers doctors with **AI-generated insights** before they even meet the patient.
 
-\---
+---
 
 ## **Tech Stack**
 
-### **Frontend \& Mobile**
+### **Frontend & Mobile**
 
 * **React.js** with **Vite** - Modern web dashboard for doctors
 * **Flutter** - Cross-platform mobile app for nurses
@@ -65,27 +57,27 @@ It reduces diagnosis time, ensures accurate record-keeping, and empowers doctors
 * **React Router** - Client-side routing
 * **Leaflet** - Interactive maps for health analytics
 
-### **Backend \& APIs**
+### **Backend & APIs**
 
 * **Node.js** with **Express.js** - Primary API server
 * **FastAPI** with **Python** - AI processing and ML services
 * **AWS Lambda** - Serverless functions for scalability
 * **AWS API Gateway** - RESTful API management
 
-### **Databases \& Storage**
+### **Databases & Storage**
 
 * **MongoDB** - Primary database for patient records
 * **AWS DynamoDB** - Serverless NoSQL database
 * **AWS S3** - File storage for audio/image uploads
 
-### **AI \& Machine Learning**
+### **AI & Machine Learning**
 
 * **Google Gemini AI** - Advanced language processing and medical analysis
 * **AWS Transcribe** - Speech-to-text conversion
 * **AWS Textract** - OCR and document analysis
 * **Groq** - Fast inference for real-time AI responses
 
-### **DevOps \& Deployment**
+### **DevOps & Deployment**
 
 * **AWS SAM (Serverless Application Model)** - Lambda deployment and infrastructure management
 * **Docker** - Backend containerization
@@ -93,9 +85,9 @@ It reduces diagnosis time, ensures accurate record-keeping, and empowers doctors
 
 [**View Detailed AWS Infrastructure Documentation**](./docs/AWS_INFRASTRUCTURE.md) - Complete architecture, service stack, and deployment workflows
 
-\---
+---
 
-## **User Roles \& Responsibilities**
+## **User Roles & Responsibilities**
 
 ### **Doctor**
 
@@ -104,7 +96,7 @@ It reduces diagnosis time, ensures accurate record-keeping, and empowers doctors
 * **Accesses the AI-generated medical history**, created automatically from scanned documents and prescriptions, **before the consultation begins**.
 * Tracks **regional health patterns** through live outbreak maps.
 
-\---
+---
 
 ### **Nurse**
 
@@ -113,7 +105,7 @@ It reduces diagnosis time, ensures accurate record-keeping, and empowers doctors
 * **Scans patient documents and prescriptions** for automatic data extraction.
 * The system transcribes and summarizes the interaction in real-time for the doctor's dashboard.
 
-\---
+---
 
 ### **Healthcare Administrator**
 
@@ -121,40 +113,40 @@ It reduces diagnosis time, ensures accurate record-keeping, and empowers doctors
 * Monitors **PHC performance**, workload, and outbreak trends.
 * Maintains data access control and system-level analytics.
 
-\---
+---
 
 ### **Patient**
 
 * Interacts only with the **nurse**.
 * Benefits from **faster consultations, structured medical history,** and **improved communication** between healthcare staff.
 
-\---
+---
 
 ## **System Flow**
 
 ```mermaid
 graph TD
-    A\[Patient Arrives at PHC] --> B\[Nurse Opens Mobile App]
-    B --> C\[Start New Consultation]
-    C --> D\[Voice Conversation Recording]
-    C --> E\[Document Scanning]
-    
-    D --> F\[AWS Transcribe<br/>Speech-to-Text]
-    E --> G\[AWS Textract<br/>OCR Processing]
-    
-    F --> H\[Google Gemini AI<br/>Medical Analysis]
+    A[Patient Arrives at PHC] --> B[Nurse Opens Mobile App]
+    B --> C[Start New Consultation]
+    C --> D[Voice Conversation Recording]
+    C --> E[Document Scanning]
+
+    D --> F[AWS Transcribe Speech-to-Text]
+    E --> G[AWS Textract OCR Processing]
+
+    F --> H[Google Gemini AI Medical Analysis]
     G --> H
-    
-    H --> I\[Generate Summary<br/>\& Medical History]
-    
-    I --> J\[Real-time Update<br/>Doctor Dashboard]
-    
-    J --> K\[Doctor Reviews<br/>AI-Generated Insights]
-    K --> L\[Informed Consultation<br/>Begins]
-    
-    L --> M\[Doctor Updates<br/>Final Diagnosis]
-    M --> N\[Admin Dashboard<br/>Analytics \& Mapping]
-    
+
+    H --> I[Generate Summary and Medical History]
+
+    I --> J[Real-time Update Doctor Dashboard]
+
+    J --> K[Doctor Reviews AI-Generated Insights]
+    K --> L[Informed Consultation Begins]
+
+    L --> M[Doctor Updates Final Diagnosis]
+    M --> N[Admin Dashboard Analytics and Mapping]
+
     style A fill:#e1f5fe
     style J fill:#f3e5f5
     style N fill:#fff3e0
@@ -174,11 +166,11 @@ graph TD
 6. The doctor proceeds with the consultation, already informed about the patient's background, saving time and improving accuracy.
 7. The **administrator dashboard** provides a higher-level view of all PHCs, users, and outbreak maps.
 
-\---
+---
 
-## **Core Features (with Names)**
+## **Core Features**
 
-### **1. Swasya Listen — AI Transcription \& Summarization**
+### **1. Sahayak Listen — AI Transcription & Summarization**
 
 An intelligent speech module that:
 
@@ -188,9 +180,9 @@ An intelligent speech module that:
 
 **Goal:** Enable the doctor to know the patient's concern even before the conversation begins.
 
-\---
+---
 
-### **2. Swasya Scan — Document Scanning \& AI Medical History**
+### **2. Sahayak Scan — Document Scanning & AI Medical History**
 
 A document intelligence module that:
 
@@ -200,9 +192,9 @@ A document intelligence module that:
 
 **Goal:** Provide the doctor with complete context about the patient's background and ongoing treatments.
 
-\---
+---
 
-### **3. Swasya Sync — Real-Time Doctor Dashboard**
+### **3. Sahayak Sync — Real-Time Doctor Dashboard**
 
 A web-based live dashboard that:
 
@@ -212,9 +204,9 @@ A web-based live dashboard that:
 
 **Goal:** Syncs the nurse's mobile activity and doctor's view seamlessly for faster diagnosis.
 
-\---
+---
 
-### **4. Swasya Map — Regional Health Outbreak Visualization**
+### **4. Sahayak Map — Regional Health Outbreak Visualization**
 
 An analytics and visualization module that:
 
@@ -224,7 +216,7 @@ An analytics and visualization module that:
 
 **Goal:** Enable proactive health management through AI-driven mapping.
 
-\---
+---
 
 ## **Architecture Overview**
 
@@ -238,7 +230,7 @@ An analytics and visualization module that:
 |Backend|**Node.js + AWS Lambda + FastAPI**|API, authentication, and synchronization layer|
 |File Storage|**AWS S3**|Audio recordings and document images|
 
-\---
+---
 
 ## **Impact**
 
@@ -255,9 +247,7 @@ An analytics and visualization module that:
 * **Predictive analytics** to detect emerging disease patterns.
 * Offline-first operation for **low-connectivity rural regions**.
 
-\---
+---
 
-
-
-> Built with passion by Team TechThugs for HackCBS 8.0 Hackathon
+> Built by **Team Bored.io** for SIH 2026 — Smart India Hackathon
 

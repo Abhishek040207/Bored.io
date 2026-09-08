@@ -1,4 +1,4 @@
-/// Swasya AI Application Constants
+/// Sahayak Application Constants
 /// 
 /// Global constants used throughout the application.
 
@@ -10,7 +10,7 @@ class AppConstants {
   // APP INFORMATION
   // ============================================================================
   
-  static const String appName = 'Swasya AI';
+  static const String appName = 'Sahayak';
   static const String appTagline = 'Turning dialogue into data and data into clarity.';
   static const String appVersion = '1.0.0';
 

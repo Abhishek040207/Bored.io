@@ -1,4 +1,4 @@
-/// Swasya AI Theme Extensions
+﻿/// Sahayak Theme Extensions
 /// 
 /// Convenient extension methods for accessing theme values.
 

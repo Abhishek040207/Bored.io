@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../config.dart';
 
-/// Comprehensive API Service for PHC AI Co-Pilot Backend
+/// Comprehensive API Service for Sahayak Backend
 /// Version: 3.0.0 - Integrated with modular FastAPI backend
 class ApiService {
   // ==================== PATIENT MANAGEMENT ====================

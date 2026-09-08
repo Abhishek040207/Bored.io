@@ -1,4 +1,4 @@
-/// Swasya AI Spacing System
+﻿/// Sahayak Spacing System
 /// 
 /// Consistent spacing scale for the entire application.
 /// Based on Tailwind CSS spacing convention.

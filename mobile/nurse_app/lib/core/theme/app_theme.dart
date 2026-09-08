@@ -1,4 +1,4 @@
-/// Swasya AI Theme Configuration
+﻿/// Sahayak Theme Configuration
 /// 
 /// Main theme configuration for the application.
 /// Combines colors, typography, and component themes.

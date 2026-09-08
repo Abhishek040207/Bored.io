@@ -13,7 +13,7 @@ app.use(express.json());
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
-    message: 'PHC AI Co-Pilot Server is running',
+    message: 'Sahayak Server is running',
     timestamp: new Date().toISOString()
   });
 });

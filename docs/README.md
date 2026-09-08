@@ -1,4 +1,4 @@
-# PHC AI Co-Pilot - Documentation
+# Sahayak — Documentation
 
 This folder contains all project documentation, architecture diagrams, and guides.
 
@@ -7,9 +7,9 @@ This folder contains all project documentation, architecture diagrams, and guide
 - `architecture.md` - System architecture and data flow
 - `api-reference.md` - API endpoints documentation
 - `deployment-guide.md` - Deployment instructions
-- `demo-script.md` - Hackathon demo presentation script
 - `setup-guide.md` - Complete setup instructions
 - **`MEDICAL_TIMELINE_API.md`** - ⭐ Medical Timeline & Queue Management API Documentation
+
 
 ## Quick Links
 

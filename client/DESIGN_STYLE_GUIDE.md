@@ -1,11 +1,11 @@
-# Swasya AI Landing Page Design Style Guide
+﻿# Sahayak Landing Page Design Style Guide
 
 ## Overview
-This document defines the comprehensive design system used across the Swasya AI landing page. The design follows a modern, minimal aesthetic with healthcare-inspired warm tones and clean typography.
+This document defines the comprehensive design system used across the Sahayak landing page. The design follows a modern, minimal aesthetic with healthcare-inspired warm tones and clean typography.
 
 ---
 
-## 🎨 Color Palette
+## ðŸŽ¨ Color Palette
 
 ### Primary Colors
 ```css
@@ -43,7 +43,7 @@ This document defines the comprehensive design system used across the Swasya AI 
 
 ---
 
-## 📝 Typography
+## ðŸ“ Typography
 
 ### Font Families
 ```css
@@ -61,7 +61,7 @@ font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Sego
 #### Headlines (H1)
 ```css
 /* Hero Headlines */
-font-size: 5xl md:6xl lg:7xl        /* 48px → 60px → 72px */
+font-size: 5xl md:6xl lg:7xl        /* 48px â†’ 60px â†’ 72px */
 font-weight: light (300)
 line-height: tight (1.25)
 letter-spacing: tight (-0.025em)
@@ -76,7 +76,7 @@ span.accent {
 
 #### Section Headlines (H2)
 ```css
-font-size: 4xl md:5xl lg:6xl        /* 36px → 48px → 60px */
+font-size: 4xl md:5xl lg:6xl        /* 36px â†’ 48px â†’ 60px */
 font-weight: light (300)
 line-height: tight (1.25)
 letter-spacing: tight (-0.025em)
@@ -94,7 +94,7 @@ color: var(--color-text-primary)
 #### Body Text
 ```css
 /* Large Body (Subtitles) */
-font-size: xl md:2xl                /* 20px → 24px */
+font-size: xl md:2xl                /* 20px â†’ 24px */
 font-weight: light (300)
 line-height: relaxed (1.625)
 color: var(--color-text-secondary)
@@ -122,7 +122,7 @@ color: var(--color-text-tertiary)
 
 ---
 
-## 🔘 Button Styles
+## ðŸ”˜ Button Styles
 
 ### Primary Button
 ```css
@@ -190,7 +190,7 @@ color: var(--color-text-tertiary)
 
 ---
 
-## 📦 Component Patterns
+## ðŸ“¦ Component Patterns
 
 ### Section Layout
 ```css
@@ -247,7 +247,7 @@ color: var(--color-text-tertiary)
 
 ---
 
-## 🎯 Interactive Elements
+## ðŸŽ¯ Interactive Elements
 
 ### Hover Effects
 - **Scale Transform**: `transform: scale(1.05)` for cards
@@ -275,7 +275,7 @@ transition: background-color 200ms ease;
 
 ---
 
-## 📐 Spacing System
+## ðŸ“ Spacing System
 
 ### Consistent Spacing Scale (Tailwind-based)
 ```css
@@ -304,7 +304,7 @@ padding: 128px 24px; /* py-32 px-6 */
 
 ---
 
-## 🔧 Special Components
+## ðŸ”§ Special Components
 
 ### Tag/Badge Component
 ```css
@@ -354,7 +354,7 @@ padding: 128px 24px; /* py-32 px-6 */
 
 ---
 
-## 📱 Responsive Design
+## ðŸ“± Responsive Design
 
 ### Breakpoints
 ```css
@@ -409,7 +409,7 @@ padding: 128px 24px; /* py-32 px-6 */
 
 ---
 
-## ♿ Accessibility
+## â™¿ Accessibility
 
 ### Color Contrast
 - All text meets WCAG AA standards
@@ -422,13 +422,13 @@ padding: 128px 24px; /* py-32 px-6 */
 - Hover states are clearly distinguishable
 
 ### Semantic HTML
-- Proper heading hierarchy (h1 → h2 → h3)
+- Proper heading hierarchy (h1 â†’ h2 â†’ h3)
 - Semantic section elements
 - Meaningful alt text for decorative elements
 
 ---
 
-## 🔄 Animation Guidelines
+## ðŸ”„ Animation Guidelines
 
 ### Micro-interactions
 - **Hover Animations**: Scale transforms (1.02 - 1.05)
@@ -442,7 +442,7 @@ padding: 128px 24px; /* py-32 px-6 */
 
 ---
 
-## 📏 Implementation Notes
+## ðŸ“ Implementation Notes
 
 ### CSS Custom Properties
 All colors are defined as CSS custom properties for easy theming and consistency.
@@ -460,4 +460,4 @@ Common patterns (buttons, cards, sections) are designed for maximum reusability 
 
 ---
 
-This style guide ensures consistency across the entire Swasya AI landing page and provides clear guidelines for future development and design iterations.
+This style guide ensures consistency across the entire Sahayak landing page and provides clear guidelines for future development and design iterations.

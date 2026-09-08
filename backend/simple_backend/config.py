@@ -2,8 +2,8 @@
 
 import os
 
-# Storage paths
-BASE_DIR = "/app/data"
+# Storage paths — uses local ./data folder when running locally
+BASE_DIR = os.environ.get("DATA_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "data"))
 PATIENTS_FILE = f"{BASE_DIR}/patients.json"
 QUEUE_FILE = f"{BASE_DIR}/queue.json"
 NOTES_FILE = f"{BASE_DIR}/notes.json"

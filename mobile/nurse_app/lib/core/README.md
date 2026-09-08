@@ -1,21 +1,21 @@
-# Swasya AI - Core Theme System
+﻿# Sahayak - Core Theme System
 
-This folder contains the complete theme system for the Swasya AI mobile application. All design tokens, colors, typography, and spacing are centralized here for consistency and easy maintenance.
+This folder contains the complete theme system for the Sahayak mobile application. All design tokens, colors, typography, and spacing are centralized here for consistency and easy maintenance.
 
 ## Structure
 
 ```
 lib/core/
-├── theme/
-│   ├── app_colors.dart       # Color palette
-│   ├── app_typography.dart   # Typography system
-│   ├── app_theme.dart        # Main theme configuration
-│   ├── app_spacing.dart      # Spacing system
-│   ├── app_animations.dart   # Animation constants
-│   └── theme_extensions.dart # Helper extensions
-├── constants/
-│   └── app_constants.dart    # App-wide constants
-└── core.dart                 # Central export file
+â”œâ”€â”€ theme/
+â”‚   â”œâ”€â”€ app_colors.dart       # Color palette
+â”‚   â”œâ”€â”€ app_typography.dart   # Typography system
+â”‚   â”œâ”€â”€ app_theme.dart        # Main theme configuration
+â”‚   â”œâ”€â”€ app_spacing.dart      # Spacing system
+â”‚   â”œâ”€â”€ app_animations.dart   # Animation constants
+â”‚   â””â”€â”€ theme_extensions.dart # Helper extensions
+â”œâ”€â”€ constants/
+â”‚   â””â”€â”€ app_constants.dart    # App-wide constants
+â””â”€â”€ core.dart                 # Central export file
 ```
 
 ## Usage
@@ -50,7 +50,7 @@ Container(
 ```dart
 // Direct access
 Text(
-  'Welcome to Swasya AI',
+  'Welcome to Sahayak',
   style: AppTypography.h1Hero,
 )
 
@@ -119,7 +119,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: AppConstants.appName,
-      theme: AppTheme.lightTheme, // Apply Swasya AI theme
+      theme: AppTheme.lightTheme, // Apply Sahayak theme
       home: const HomeScreen(),
     );
   }
@@ -189,7 +189,7 @@ Container(
 
 ### Colors
 
-All colors from the Swasya AI design system:
+All colors from the Sahayak design system:
 - `AppColors.background` - #FDF9F6 (Soft cream)
 - `AppColors.textPrimary` - #201510 (Deep brownish-black)
 - `AppColors.primary` - #8A9663 (Soft olive green)
@@ -257,4 +257,4 @@ This theme matches the landing page design at [client React app]. The same color
 
 ---
 
-**Swasya AI** - AI Co-Pilot for Primary Healthcare
+**Sahayak** - AI Co-Pilot for Primary Healthcare

@@ -19,7 +19,7 @@ class Config {
   static const String statsEndpoint = '$apiBaseUrl/stats';
   
   // App Info
-  static const String appName = 'PHC AI Co-Pilot';
+  static const String appName = 'Sahayak';
   static const String appVersion = '1.0.0';
   static const String nurseName = 'Nurse Rekha';
 }

@@ -1,6 +1,6 @@
-# API Testing Guide
+﻿# API Testing Guide
 
-Quick reference for testing all endpoints of the PHC AI Co-Pilot Backend.
+Quick reference for testing all endpoints of the Sahayak Backend.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ curl http://localhost:8000/
 **Response:**
 ```json
 {
-  "service": "PHC AI Co-Pilot",
+  "service": "Sahayak",
   "version": "2.0.0",
   "status": "running",
   "features": [...],
@@ -77,7 +77,7 @@ curl -X POST http://localhost:8000/patients \
 }
 ```
 
-**💡 Save the `patient_id` for next steps!**
+**ðŸ’¡ Save the `patient_id` for next steps!**
 
 ### 4. List All Patients
 ```bash
@@ -148,7 +148,7 @@ curl -X POST http://localhost:8000/queue/add \
 }
 ```
 
-**💡 Save the `queue_id` for next steps!**
+**ðŸ’¡ Save the `queue_id` for next steps!**
 
 ### 7. Get Queue Status
 ```bash
@@ -218,7 +218,7 @@ curl -X POST http://localhost:8000/upload/audio/PAT_A1B2C3D4 \
   "transcript": "Patient complains of fever and headache...",
   "soap_note": {
     "subjective": "Patient complains of...",
-    "objective": "Temperature: 101°F...",
+    "objective": "Temperature: 101Â°F...",
     "assessment": "Viral fever",
     "plan": "Rest and fluids...",
     "chief_complaint": "Fever",

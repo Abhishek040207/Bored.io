@@ -1,0 +1,23 @@
+# =================================================================
+# Swasya AI / MediKiosk - Master Environment Variables
+# =================================================================
+
+# Google Gemini API Key (Get from https://aistudio.google.com/)
+GEMINI_API_KEY= AQ.Ab8RN6IbnEB34lzwTCDIKYbZ9SHt0bxO41MRbAdzqdRQLLOkDA
+
+# Groq API Key (Get from https://console.groq.com/)
+GROQ_API_KEY= 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
+
+# Backend & Frontend URLs
+BACKEND_URL=http://localhost:8000
+FRONTEND_URL=http://localhost:5173
+VITE_API_BASE_URL=http://localhost:8000
+
+# =================================================================
+# Bhashini NLTM API (Government of India - MeitY)
+# Register at https://bhashini.gov.in to get credentials
+# Enables: ASR (Speech-to-Text), NMT (Translation), TTS (Text-to-Speech)
+# =================================================================
+BHASHINI_USER_ID=
+BHASHINI_API_KEY=
+BHASHINI_PIPELINE_ID=64392f96daac500b55c543cd

@@ -1,11 +1,11 @@
-# AWS Infrastructure Architecture
+﻿# AWS Infrastructure Architecture
 
-## Swasya AI - Hybrid Cloud Architecture
+## Sahayak - Hybrid Cloud Architecture
 **Turning dialogue into data and data into clarity**
 
 ### Executive Summary
 
-Swasya AI leverages a **hybrid serverless architecture** on AWS, combining the cost-effectiveness of EC2 for high-frequency, low-latency endpoints with the scalability and event-driven capabilities of AWS Lambda for compute-intensive AI processing tasks. This approach optimizes for both performance and cost while maintaining enterprise-grade reliability.
+Sahayak leverages a **hybrid serverless architecture** on AWS, combining the cost-effectiveness of EC2 for high-frequency, low-latency endpoints with the scalability and event-driven capabilities of AWS Lambda for compute-intensive AI processing tasks. This approach optimizes for both performance and cost while maintaining enterprise-grade reliability.
 
 **Key Architectural Decisions:**
 - **EC2 (t3.micro)** for REST API endpoints requiring sub-200ms response times
@@ -133,7 +133,7 @@ graph TB
 ### 2. Event-Driven Processing
 
 All heavy AI workloads are **decoupled** using S3 triggers:
-- **Upload → Process → Store → Notify** pattern
+- **Upload â†’ Process â†’ Store â†’ Notify** pattern
 - Eliminates timeouts for long-running tasks
 - Automatic retries with exponential backoff
 - Dead Letter Queue (DLQ) for failed jobs
@@ -163,10 +163,10 @@ Availability Zone: eu-north-1a
 AMI: Ubuntu 22.04 LTS
 API Endpoint: https://api.swasya.rishia.in
 Security Group:
-  - Port 80 (HTTP) → ALB only
-  - Port 443 (HTTPS) → ALB only
-  - Port 22 (SSH) → Bastion host only
-IAM Role: EC2-Swasya-Backend-Role
+  - Port 80 (HTTP) â†’ ALB only
+  - Port 443 (HTTPS) â†’ ALB only
+  - Port 22 (SSH) â†’ Bastion host only
+IAM Role: EC2-Sahayak-Backend-Role
   Policies:
     - DynamoDBFullAccess (scoped to Swasya tables)
     - S3PutObject (swasya-audio-uploads, swasya-image-uploads)
@@ -190,11 +190,11 @@ Deployed using **AWS SAM (Serverless Application Model)**
 
 **Environment Variables (via Secrets Manager):**
 ```bash
-GEMINI_API_KEY → SecretId: prod/gemini/api-key
-REGION → eu-north-1
-PATIENTS_TABLE → Patients
-NOTES_TABLE → PatientNotes
-HISTORY_TABLE → PatientHistory
+GEMINI_API_KEY â†’ SecretId: prod/gemini/api-key
+REGION â†’ eu-north-1
+PATIENTS_TABLE â†’ Patients
+NOTES_TABLE â†’ PatientNotes
+HISTORY_TABLE â†’ PatientHistory
 ```
 
 **Lambda Layers:**
@@ -352,13 +352,13 @@ transcribe_client.start_transcription_job(
 ```json
 {
   "transcripts": [{
-    "transcript": "मरीज को बुखार है और सिर दर्द है"
+    "transcript": "à¤®à¤°à¥€à¤œ à¤•à¥‹ à¤¬à¥à¤–à¤¾à¤° à¤¹à¥ˆ à¤”à¤° à¤¸à¤¿à¤° à¤¦à¤°à¥à¤¦ à¤¹à¥ˆ"
   }],
   "items": [
     {
       "start_time": "0.0",
       "end_time": "1.23",
-      "alternatives": [{"confidence": "0.98", "content": "मरीज"}],
+      "alternatives": [{"confidence": "0.98", "content": "à¤®à¤°à¥€à¤œ"}],
       "type": "pronunciation"
     }
   ]
@@ -533,7 +533,7 @@ sequenceDiagram
     Transcribe->>Transcribe: Speech-to-Text processing (15-30s)
     Transcribe-->>L2: Transcription JSON
     
-    L2->>Gemini: Generate SOAP note<br/>(Hindi transcript → Structured JSON)
+    L2->>Gemini: Generate SOAP note<br/>(Hindi transcript â†’ Structured JSON)
     Gemini-->>L2: SOAP note JSON
     
     L2->>DDB: PutItem (PatientNotes table)
@@ -615,7 +615,7 @@ graph TD
 
 ### 1. IAM Roles & Policies
 
-**EC2 Instance Role: EC2-Swasya-Backend-Role**
+**EC2 Instance Role: EC2-Sahayak-Backend-Role**
 ```json
 {
   "Version": "2012-10-17",
@@ -772,7 +772,7 @@ NAT Gateway: nat-swasya-prod (for private subnet internet access)
 - 10,000 requests/month
 - Approximately $20/month (Google Cloud billing)
 
-**Grand Total:** **$187.58/month** (approximately ₹15,650 at ₹83/USD)
+**Grand Total:** **$187.58/month** (approximately â‚¹15,650 at â‚¹83/USD)
 
 ---
 
@@ -884,7 +884,7 @@ echo "Deployment complete!"
 **Systemd Service: /etc/systemd/system/swasya-backend.service**
 ```ini
 [Unit]
-Description=Swasya AI FastAPI Backend
+Description=Sahayak FastAPI Backend
 After=network.target
 
 [Service]
@@ -944,16 +944,16 @@ WantedBy=multi-user.target
 
 ## Conclusion
 
-Swasya AI leverages a **production-grade hybrid serverless architecture** on AWS, combining the reliability of EC2 for latency-sensitive operations with the scalability and cost-efficiency of Lambda for AI workloads.
+Sahayak leverages a **production-grade hybrid serverless architecture** on AWS, combining the reliability of EC2 for latency-sensitive operations with the scalability and cost-efficiency of Lambda for AI workloads.
 
 The architecture demonstrates AWS best practices for serverless applications, including event-driven design, microservices architecture, infrastructure as code, and comprehensive monitoring. The hybrid approach optimizes for both performance and cost while maintaining the flexibility to scale as the healthcare network grows.
 
 ---
 
-**Project:** Swasya AI - Turning dialogue into data and data into clarity
+**Project:** Sahayak - Turning dialogue into data and data into clarity
 
 **API Endpoint:** https://api.swasya.rishia.in
 
 **Region:** eu-north-1 (Stockholm)
 
-**Maintained By:** Swasya AI Development Team
+**Maintained By:** Team Bored.io

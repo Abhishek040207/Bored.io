@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -175,7 +175,7 @@ const MapController = ({ zoomLevel }) => {
   return null;
 };
 
-const SwasyaMapLeaflet = () => {
+const SahayakMapLeaflet = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [lastRefresh] = useState(new Date());
@@ -698,7 +698,7 @@ const SwasyaMapLeaflet = () => {
                     color: colors.textSecondary
                   }}
                 >
-                  ✕
+                  âœ•
                 </button>
               </div>
 
@@ -837,4 +837,4 @@ const SwasyaMapLeaflet = () => {
   );
 };
 
-export default SwasyaMapLeaflet;
+export default SahayakMapLeaflet;

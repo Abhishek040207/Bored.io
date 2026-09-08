@@ -1,4 +1,4 @@
-# 🚀 Quick Reference - PHC AI Co-Pilot APIs
+﻿# ðŸš€ Quick Reference - Sahayak APIs
 
 ## Base URL
 ```

@@ -1,6 +1,6 @@
-AWSTemplateFormatVersion: '2010-09-09'
+﻿AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: PHC AI Co-Pilot - Serverless Backend for Healthcare Innovation
+Description: Sahayak - Serverless Backend for Healthcare Innovation
 
 # Parameters allow you to pass values during deployment
 Parameters:
@@ -189,7 +189,7 @@ Resources:
             Method: post
             RestApiId: !Ref ApiGateway
 
-  # Lambda 3: AI Scribe Task (Audio → Transcribe → Gemini)
+  # Lambda 3: AI Scribe Task (Audio â†’ Transcribe â†’ Gemini)
   ScribeTaskFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -219,7 +219,7 @@ Resources:
       Principal: s3.amazonaws.com
       SourceArn: !Sub arn:aws:s3:::${AudioBucketName}
 
-  # Lambda 4: AI Digitizer Task (Image → Textract → Gemini)
+  # Lambda 4: AI Digitizer Task (Image â†’ Textract â†’ Gemini)
   DigitizeTaskFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiMenu } from 'react-icons/fi';
 import { colors } from '../utils/colors';
 
-const SwasyaMap = () => {
+const SahayakMap = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [lastRefresh] = useState(new Date());
@@ -149,4 +149,4 @@ const SwasyaMap = () => {
   );
 };
 
-export default SwasyaMap;
+export default SahayakMap;
